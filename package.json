@@ -30,7 +30,9 @@
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",
     "react-native-web": "~0.20.0",
-    "react-native-svg": "15.11.2"
+    "react-native-svg": "15.11.2",
+    "react-native-maps": "1.20.1",
+    "expo-location": "~18.1.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
