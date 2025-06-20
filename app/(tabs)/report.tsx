@@ -7,6 +7,7 @@ export default function TabReportScreen() {
   const [fontsLoaded] = useFonts({
     "Poppins-SemiBold": require("../../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Light": require("../../assets/fonts/Poppins-Light.ttf"),
+    "Poppins-Regular": require("../../assets/fonts/Poppins-Regular.ttf"),
   });
 
   return (
@@ -56,9 +57,23 @@ export default function TabReportScreen() {
        <View style={styles.assistenciaBalloon}>
          <Text style={styles.assistenciaText}>Assistência Social</Text>
        </View>
+       <Image 
+         source={require('../../assets/images/image 70.png')} 
+         style={styles.imageContainer3}
+       />
+       <View style={styles.saudeBalloon}>
+         <Text style={styles.saudeText}>Saúde</Text>
+       </View>
+       <Image 
+         source={require('../../assets/images/image 69.png')} 
+         style={styles.imageContainer4}
+       />
+       <View style={styles.acolhimentoBalloon}>
+         <Text style={styles.acolhimentoText}>Acolhimento</Text>
+       </View>
 
        {/* Acessar mais informações e orientações text */}
-       <Text style={styles.moreInfoText}>Acessar mais informações e orientações</Text>
+       <Text style={styles.moreInfoText}>Acessar mais informações</Text>
     </View>
   );
 };
@@ -69,7 +84,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   header: {
-    marginTop: 20,
+    marginTop: 57,
     marginLeft: 37,
     marginRight: 204,
   },
@@ -93,7 +108,7 @@ const styles = StyleSheet.create({
   },
   bellIcon: {
     position: 'absolute',
-    top: 32,
+    top: 69,
     right: 97,
     left: 303,
     width: 30,
@@ -102,7 +117,7 @@ const styles = StyleSheet.create({
   },
   settingsIcon: {
     position: 'absolute',
-    top: 33,
+    top: 70,
     left: 360,
     right: 42,
     width: 28,
@@ -110,10 +125,11 @@ const styles = StyleSheet.create({
     color: '#33363F',
   },
   questionText: {
-    marginTop: 236 - 138 -57,
+    top: 236 - 138 -57,
     width: 271,
     height: 34,
     fontSize: 14,
+    fontWeight: 'bold',
     fontFamily: 'Poppins-SemiBold',
     color: '#33363F',
   },
@@ -226,6 +242,7 @@ const styles = StyleSheet.create({
     height: 34,
     fontFamily: 'Poppins-SemiBold',
     fontSize: 14,
+    fontWeight: 'bold',
     color: '#33363F',
   },
   imageContainer: {
@@ -249,7 +266,7 @@ const styles = StyleSheet.create({
   },
   delegaciasText: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 10,
+    fontSize: 9,
     color: '#33363F',
     textAlign: 'center',
   },
@@ -274,19 +291,69 @@ const styles = StyleSheet.create({
   },
   assistenciaText: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 12,
+    fontSize: 9,
     color: '#33363F',
     textAlign: 'center',
   },
-  moreInfoText: {
+  imageContainer3: {
     position: 'absolute',
     left: 39,
-    top: 764,
-    width: 228,
-    height: 48,
+    top: 609,
+    width: 164,
+    height: 117,
+    borderRadius: 10,
+  },
+  saudeBalloon: {
+    position: 'absolute',
+    left: 39,
+    top: 609,
+    width: 68,
+    height: 36,
+    backgroundColor: '#F0F0F0',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  saudeText: {
+     fontFamily: 'Poppins-Regular',
+     fontSize: 9,
+     color: '#33363F',
+     textAlign: 'center',
+   },
+   imageContainer4: {
+     position: 'absolute',
+     left: 228,
+     top: 609,
+     width: 164,
+     height: 117,
+     borderRadius: 10,
+   },
+   acolhimentoBalloon: {
+     position: 'absolute',
+     left: 228,
+     top: 609,
+     width: 109,
+     height: 36,
+     backgroundColor: '#F0F0F0',
+     borderRadius: 10,
+     justifyContent: 'center',
+     alignItems: 'center',
+   },
+   acolhimentoText: {
+     fontFamily: 'Poppins-Regular',
+     fontSize: 9,
+     color: '#33363F',
+     textAlign: 'center',
+   },
+   moreInfoText: {
+    position: 'absolute',
+    left: 39,
+    top: 738,
+    width: 300,
+    height: 68,
     fontFamily: 'Poppins-SemiBold',
     fontSize: 14,
     color: '#33363F',
-    textAlign: 'left',
+    fontWeight: 'bold',  
   },
 });
