@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     width: "78%",
     height: "40%",
     marginVertical: 10,
-    marginTop: 45,
+    marginTop: 10,
   },
   header: {
     width: "100%",
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "flex-start",
     marginLeft: 85,
-    marginTop: 40,
+    marginTop: 20,
   },
   recomendationText: {
     width: "100%",

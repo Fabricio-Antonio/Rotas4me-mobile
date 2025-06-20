@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useFonts } from 'expo-font';
 
@@ -37,9 +38,30 @@ export default function TabReportScreen() {
           Compartilhar Localização
         </Text>
       </View>
+      <TouchableOpacity style={styles.addButton}>
+        <Text style={styles.addButtonText}>+</Text>
+      </TouchableOpacity>
+      <Text style={styles.supportNetworkText}>Localizar rede de apoio</Text>
+      <Image 
+        source={require('../../assets/images/image 67.png')} 
+        style={styles.imageContainer}
+      />
+      <View style={styles.delegaciasBalloon}>
+         <Text style={styles.delegaciasText}>Delegacias</Text>
+       </View>
+       <Image 
+         source={require('../../assets/images/image 68.png')} 
+         style={styles.imageContainer2}
+       />
+       <View style={styles.assistenciaBalloon}>
+         <Text style={styles.assistenciaText}>Assistência Social</Text>
+       </View>
+
+       {/* Acessar mais informações e orientações text */}
+       <Text style={styles.moreInfoText}>Acessar mais informações e orientações</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -47,7 +69,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   header: {
-    marginTop: 57,
+    marginTop: 20,
     marginLeft: 37,
     marginRight: 204,
   },
@@ -71,7 +93,7 @@ const styles = StyleSheet.create({
   },
   bellIcon: {
     position: 'absolute',
-    top: 69,
+    top: 32,
     right: 97,
     left: 303,
     width: 30,
@@ -80,7 +102,7 @@ const styles = StyleSheet.create({
   },
   settingsIcon: {
     position: 'absolute',
-    top: 70,
+    top: 33,
     left: 360,
     right: 42,
     width: 28,
@@ -169,5 +191,102 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     textAlign: 'center',
     textAlignVertical: 'center',
+  },
+  addButton: {
+    position: 'absolute',
+    left: 350,
+    top: 350,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  addButtonText: {
+    fontSize: 18,
+    fontWeight: '300',
+    color: '#000000',
+    textAlign: 'center',
+  },
+  supportNetworkText: {
+    position: 'absolute',
+    left: 38,
+    top: 436,
+    width: 271,
+    height: 34,
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 14,
+    color: '#33363F',
+  },
+  imageContainer: {
+    position: 'absolute',
+    left: 39,
+    top: 476,
+    width: 164,
+    height: 117,
+    borderRadius: 10,
+  },
+  delegaciasBalloon: {
+    position: 'absolute',
+    left: 38,
+    top: 476,
+    width: 89,
+    height: 36,
+    backgroundColor: '#F0F0F0',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  delegaciasText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 10,
+    color: '#33363F',
+    textAlign: 'center',
+  },
+  imageContainer2: {
+    position: 'absolute',
+    left: 228,
+    top: 476,
+    width: 164,
+    height: 117,
+    borderRadius: 10,
+  },
+  assistenciaBalloon: {
+    position: 'absolute',
+    left: 228,
+    top: 476,
+    width: 140,
+    height: 36,
+    backgroundColor: '#F0F0F0',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  assistenciaText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 12,
+    color: '#33363F',
+    textAlign: 'center',
+  },
+  moreInfoText: {
+    position: 'absolute',
+    left: 39,
+    top: 764,
+    width: 228,
+    height: 48,
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 14,
+    color: '#33363F',
+    textAlign: 'left',
   },
 });
