@@ -8,7 +8,8 @@ const UserIcon = (props: SvgProps) => (
     {...props}
   >
     <Path
-      stroke="#33363F"
+      stroke={props.stroke || "#33363F"}
+      fill={props.fill || "none"}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}

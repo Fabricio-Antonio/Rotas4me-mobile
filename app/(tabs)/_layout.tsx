@@ -11,6 +11,7 @@ import HomeIcon from "@/assets/icons/HomeIcon";
 import MegaPhoneIcon from "@/assets/icons/MegaPhoneIcon";
 import UserIcon from "@/assets/icons/UserIcon";
 import PhoneIcon from "@/assets/icons/PhoneIcon";
+import CustomTabBar from '@/components/CustomTabBar';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -29,6 +30,7 @@ export default function TabLayout() {
       tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
       headerShown: useClientOnlyValue(false, true),
     }}
+    tabBar={props => <CustomTabBar {...props} />}
     >
     <Tabs.Screen
       name="profile"
@@ -53,7 +55,7 @@ export default function TabLayout() {
         options={{
           title: "",
           tabBarIcon: ({ color }) => (
-            <HomeIcon stroke={color} width={40} height={40} />
+            <HomeIcon stroke={color} width={50} height={50} />
           ),
           headerRight: () => (
             <Link href="/modal" asChild>

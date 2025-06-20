@@ -4,11 +4,13 @@ const AlertIcon = (props: SvgProps) => (
   <Svg
     width={30}
     height={30}
+    viewBox="0 0 35 35"
     fill="none"
     {...props}
   >
     <Path
-      stroke="#33363F"
+      stroke={props.stroke || "#33363F"}
+      fill={props.fill || "none"}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={2}
