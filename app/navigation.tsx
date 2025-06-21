@@ -130,6 +130,7 @@ export default function NavigationScreen() {
 
   const getMarkerIcon = (type: string) => {
     const icons: { [key: string]: any } = {
+      // Tipos originais (mantidos para compatibilidade)
       danger: require('../assets/markers/icon_danger.png'),
       attention: require('../assets/markers/icon_attention.png'),
       camera: require('../assets/markers/icon_camera.png'),
@@ -137,13 +138,35 @@ export default function NavigationScreen() {
       lamp: require('../assets/markers/icon_lamp.png'),
       police: require('../assets/markers/icon_police.png'),
       robery: require('../assets/markers/icon_robery.png'),
+      
+      // Novos tipos do enum MarkerType do backend
+      // Marcadores de perigo/insegurança
+      POOR_LIGHTING: require('../assets/markers/icon_lamp.png'),
+      SUSPECTED_DRUG_TRAFFICKING: require('../assets/markers/icon_danger.png'),
+      HARASSMENT_REPORTS: require('../assets/markers/icon_attention.png'),
+      UNSAFE_AREA: require('../assets/markers/icon_danger.png'),
+      HIGH_CRIME_RATE: require('../assets/markers/icon_danger.png'),
+      CATCALLING_ZONE: require('../assets/markers/icon_attention.png'),
+      STALKING_REPORTS: require('../assets/markers/icon_attention.png'),
+      UNSAFE_BUS_STOP: require('../assets/markers/icon_attention.png'),
+      NIGHT_DANGER_ZONE: require('../assets/markers/icon_danger.png'),
+      WEEKEND_RISK_AREA: require('../assets/markers/icon_attention.png'),
+      
+      // Marcadores de segurança
+      SAFE_SPOT: require('../assets/markers/icon_safe.png'),
+      SECURITY_CAMERA: require('../assets/markers/icon_camera.png'),
+      EMERGENCY_BUTTON: require('../assets/markers/icon_police.png'),
+      TRUSTED_ESTABLISHMENT: require('../assets/markers/icon_safe.png'),
+      
+      // Compatibilidade com tipos antigos (maiúsculos)
       ACCIDENT: require('../assets/markers/icon_attention.png'),
       ROBBERY: require('../assets/markers/icon_robery.png'),
-      POOR_LIGHTING: require('../assets/markers/icon_lamp.png'),
       DANGER: require('../assets/markers/icon_danger.png'),
       POLICE: require('../assets/markers/icon_police.png'),
       CAMERA: require('../assets/markers/icon_camera.png'),
       SAFE_ZONE: require('../assets/markers/icon_safe.png'),
+      
+      // Compatibilidade com tipos antigos (minúsculos)
       accident: require('../assets/markers/icon_attention.png'),
       robbery: require('../assets/markers/icon_robery.png'),
       poor_lighting: require('../assets/markers/icon_lamp.png'),
