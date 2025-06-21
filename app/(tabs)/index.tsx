@@ -66,7 +66,7 @@ export default function TabOneScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Olá, usuária! </Text>
+        <Text style={styles.title}>Olá, usuária!</Text>
       </View>
       {location && (
           <MapView
@@ -102,11 +102,14 @@ export default function TabOneScreen() {
             resizeMode="contain"
           />
         </TouchableOpacity>
-        <View style={[styles.recomendationCard, { justifyContent: "center" }]}>
+        <TouchableOpacity 
+          style={[styles.recomendationCard, { justifyContent: "center" }]}
+          onPress={() => router.push('/route-evaluation' as any)}
+        >
           <Text style={styles.cardText}>
             Adicionar uma avaliação de uma rota
           </Text>
-        </View>
+        </TouchableOpacity>
         <View style={[styles.recomendationCard, { justifyContent: "center" }]}>
           <Text style={styles.cardText}>
             Iniciar preenchimento de um{" "}
