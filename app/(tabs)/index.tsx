@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import {
   requestForegroundPermissionsAsync,
@@ -12,8 +12,10 @@ import MapView, { Marker } from "react-native-maps";
 import { useFonts } from "expo-font";
 import { Image } from "react-native";
 import { View as RNView } from "react-native";
+import { useRouter } from "expo-router";
 
 export default function TabOneScreen() {
+  const router = useRouter();
   const [location, setLocation] = useState<LocationObject | null>(null);
 
   const [fontsLoaded] = useFonts({
@@ -89,14 +91,17 @@ export default function TabOneScreen() {
         <Text style={styles.recomendationText}>Ações recomendadas</Text>
       </View>
       <View style={styles.cardsContainer}>
-        <View style={[styles.recomendationCard, styles.cardNewRoute]}>
+        <TouchableOpacity 
+          style={[styles.recomendationCard, styles.cardNewRoute]}
+          onPress={() => router.push('/modal')}
+        >
           <Text style={styles.cardText}>Iniciar{"\n"}nova rota</Text>
           <Image
             source={require("../../assets/images/hand.png")}
             style={{ width: 60, height: 60 }}
             resizeMode="contain"
           />
-        </View>
+        </TouchableOpacity>
         <View style={[styles.recomendationCard, { justifyContent: "center" }]}>
           <Text style={styles.cardText}>
             Adicionar uma avaliação de uma rota

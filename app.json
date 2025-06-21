@@ -34,6 +34,10 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "backendUrl": "http://localhost:3000",
+      "environment": "development"
     }
   }
 }
