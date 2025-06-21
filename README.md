@@ -1,126 +1,213 @@
 # Rotas4me Mobile
 
-Aplicativo mobile para cálculo de rotas seguras usando React Native e Expo.
+Aplicativo móvel para navegação e avaliação de rotas seguras, desenvolvido com React Native e Expo.
 
-## Configuração do Backend
+## 📱 Sobre o Projeto
 
-### Variáveis de Ambiente
+O Rotas4me é um aplicativo que permite aos usuários encontrar e avaliar rotas seguras, reportar incidentes e compartilhar informações sobre segurança urbana.
 
-O aplicativo agora está configurado para usar um backend real. As configurações estão no arquivo `.env` e `app.json`.
+## 🚀 Tecnologias Utilizadas
 
-#### Arquivo .env
+- **React Native** 0.79.4
+- **Expo** ~53.0.12
+- **Expo Router** ~5.1.0
+- **React Native Maps** 1.20.1
+- **TypeScript** ~5.8.3
+- **Axios** para requisições HTTP
+- **Google Maps API** para mapas e autocompletar
+
+## 📋 Pré-requisitos
+
+Antes de começar, certifique-se de ter instalado:
+
+- [Node.js](https://nodejs.org/) (versão 18 ou superior)
+- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
+- [Expo CLI](https://docs.expo.dev/get-started/installation/)
+- [Android Studio](https://developer.android.com/studio) (para desenvolvimento Android)
+- [Xcode](https://developer.apple.com/xcode/) (para desenvolvimento iOS - apenas macOS)
+
+## 🔧 Instalação
+
+1. **Clone o repositório:**
+```bash
+git clone <url-do-repositorio>
+cd Rotas4me-mobile
 ```
-BACKEND_URL=http://localhost:3000
-ENVIRONMENT=development
+
+2. **Instale as dependências:**
+```bash
+npm install
+# ou
+yarn install
 ```
 
-#### Configuração no app.json
-As variáveis são expostas através da seção `extra` no `app.json`:
-```json
-"extra": {
-  "backendUrl": "http://localhost:3000",
-  "environment": "development"
-}
+3. **Configure as variáveis de ambiente:**
+
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+
+```env
+# URL da API Backend
+EXPO_PUBLIC_BACKEND_URL=https://api.rotas4me.com
+
+# Google Maps e Places API Keys
+EXPO_PUBLIC_GOOGLE_MAPS_API_KEY=sua_google_maps_api_key_aqui
+EXPO_PUBLIC_GOOGLE_PLACES_API_KEY=sua_google_places_api_key_aqui
+
+# Environment
+EXPO_PUBLIC_ENVIRONMENT=development
 ```
 
-### Endpoints do Backend
+### 🗝️ Configuração das API Keys do Google
 
-O aplicativo está integrado com a API documentada no Swagger (`http://localhost:3000/api/docs-json`). Os principais endpoints utilizados são:
+Para obter as chaves da API do Google Maps:
 
-#### Marcadores de Segurança
+1. Acesse o [Google Cloud Console](https://console.cloud.google.com/)
+2. Crie um novo projeto ou selecione um existente
+3. Ative as seguintes APIs:
+   - Maps SDK for Android
+   - Maps SDK for iOS
+   - Places API
+   - Geocoding API
+4. Crie credenciais (API Key)
+5. Configure as restrições de API conforme necessário
+
+## 🏃‍♂️ Executando o Projeto
+
+### Desenvolvimento
+
+```bash
+# Iniciar o servidor de desenvolvimento
+npm start
+# ou
+yarn start
+```
+
+### Plataformas Específicas
+
+```bash
+# Android
+npm run android
+# ou
+yarn android
+
+# iOS (apenas macOS)
+npm run ios
+# ou
+yarn ios
+
+# Web
+npm run web
+# ou
+yarn web
+```
+
+## 📱 Testando no Dispositivo
+
+### Usando Expo Go
+
+1. Instale o [Expo Go](https://expo.dev/client) no seu dispositivo
+2. Execute `npx expo start --tunnel` no terminal utilizando um cabo, e `npx expo start` para utilizar a rede.
+3. Escaneie o QR code com o Expo Go (Android) ou Camera (iOS)
+
+## 📁 Estrutura do Projeto
+
+```
+Rotas4me-mobile/
+├── app/                    # Páginas da aplicação (Expo Router)
+│   ├── (tabs)/            # Abas principais
+│   │   ├── index.tsx      # Tela principal (mapa)
+│   │   ├── call.tsx       # Tela de chamadas de emergência
+│   │   ├── info.tsx       # Informações e dicas
+│   │   ├── profile.tsx    # Perfil do usuário
+│   │   └── report.tsx     # Reportar incidentes
+│   ├── _layout.tsx        # Layout raiz
+│   ├── modal.tsx          # Modal screens
+│   ├── navigation.tsx     # Navegação
+│   └── route-evaluation.tsx # Avaliação de rotas
+├── assets/                # Recursos estáticos
+│   ├── fonts/             # Fontes customizadas (Poppins)
+│   ├── icons/             # Ícones SVG
+│   ├── images/            # Imagens
+│   └── markers/           # Marcadores do mapa
+├── components/            # Componentes reutilizáveis
+│   ├── AddressAutocomplete.tsx
+│   ├── CustomTabBar.tsx
+│   └── ...
+├── constants/             # Constantes e configurações
+├── services/              # Serviços e APIs
+│   ├── ApiService.ts      # Serviço principal da API
+│   ├── NavigationService.ts
+│   └── NominatimService.ts
+├── app.json              # Configuração do Expo
+├── eas.json              # Configuração do EAS Build
+└── package.json          # Dependências do projeto
+```
+
+## 🌐 API Backend
+
+O aplicativo está integrado com a API Rotas4me. Os principais endpoints utilizados são:
+
+### Marcadores de Segurança
 - **GET** `/maps/safety-markers` - Buscar marcadores de segurança próximos
 - **GET** `/maps/all-markers` - Buscar todos os marcadores
 - **GET** `/maps/markers-by-type` - Buscar marcadores por tipo
 - **GET** `/marker/nearby` - Buscar marcadores próximos com parâmetros de localização
 
-#### Cálculo de Rota
+### Cálculo de Rota
 - **GET** `/maps/route` - Calcular rota evitando marcadores perigosos
 - Parâmetros: `origin`, `destination`, `avoidDangerous` (boolean)
 
-#### Geocodificação
+### Geocodificação
 - **GET** `/maps/geocode` - Geocodificar endereço
 - **GET** `/maps/reverse-geocode` - Geocodificação reversa
 - **GET** `/maps/distance-matrix` - Calcular matriz de distância
 
-#### Usuários
+### Usuários
 - **GET** `/user/nearby` - Buscar usuários próximos
 - **POST** `/user/{id}/emergency-alert` - Enviar alerta de emergência
 
-#### SMS
+### SMS
 - **GET** `/sms/status` - Verificar status do serviço SMS (usado como health check)
-- **POST** `/sms/send` - Enviar SMS
 
-### APIs Externas
+## 🌍 Variáveis de Ambiente
 
-#### Google Maps API
-Se você precisar usar a Google Maps API diretamente no frontend:
+| Variável | Descrição | Exemplo |
+|----------|-----------|----------|
+| `EXPO_PUBLIC_BACKEND_URL` | URL da API backend | `https://api.rotas4me.com` |
+| `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` | Chave da API do Google Maps | `AIzaSy...` |
+| `EXPO_PUBLIC_GOOGLE_PLACES_API_KEY` | Chave da API do Google Places | `AIzaSy...` |
+| `EXPO_PUBLIC_ENVIRONMENT` | Ambiente de execução | `development`, `production` |
 
-1. Obtenha uma chave da API no [Google Cloud Console](https://console.cloud.google.com/)
-2. Adicione no `.env`:
-```
-GOOGLE_MAPS_API_KEY=sua_chave_aqui
-```
-3. Adicione no `app.json`:
-```json
-"extra": {
-  "googleMapsApiKey": "sua_chave_aqui"
-}
-```
+## 🔒 Segurança
 
-**Nota:** É recomendado usar a Google Maps API apenas no backend por questões de segurança.
+- **Nunca** commite as chaves de API no repositório
+- Use variáveis de ambiente para informações sensíveis
+- Configure restrições adequadas nas APIs do Google Cloud
+- Mantenha as dependências atualizadas
 
-### Fallback para Dados Simulados
+## 🐛 Solução de Problemas
 
-O aplicativo possui um sistema de fallback robusto:
+### Erro de API Key não encontrada
 
-1. **Primeira tentativa**: Usa o backend real
-2. **Se o backend estiver indisponível**: Usa dados simulados
-3. **Se houver erro na requisição**: Tenta fallback para dados simulados
-
-Isso garante que o aplicativo sempre funcione, mesmo sem conexão com o backend.
-
-### Estrutura do Projeto
-
-```
-├── services/
-│   └── ApiService.ts          # Serviço centralizado para chamadas de API
-├── constants/
-│   └── Config.ts              # Configurações centralizadas
-├── app/
-│   └── modal.tsx              # Modal de criação de rotas (atualizado)
-├── .env                       # Variáveis de ambiente
-└── app.json                   # Configuração do Expo
-```
-
-### Como Executar
-
-1. **Instalar dependências**:
 ```bash
+# Limpe o cache e reinicie
+npx expo start --clear
+```
+```bash
+# Limpe node_modules e reinstale
+rm -rf node_modules
 npm install
+
+# Limpe cache do Expo
+npx expo install --fix
 ```
 
-2. **Configurar o backend**:
-   - Certifique-se de que seu backend está rodando em `http://localhost:3000`
-   - Ou atualize a URL no `.env` e `app.json`
+### Problemas com mapas
 
-3. **Executar o aplicativo**:
-```bash
-npm start
-```
+1. Verifique se as API Keys estão configuradas corretamente
+2. Confirme se as APIs necessárias estão ativadas no Google Cloud
+3. Verifique as restrições de API
 
-### Logs e Debug
+## 📄 Licença
 
-O aplicativo agora inclui logs detalhados:
-- ✅ Sucesso ao carregar dados do backend
-- ⚠️ Fallback para dados simulados
-- ❌ Erros de conexão ou API
-
-Verifique o console do Metro/Expo para acompanhar o status das requisições.
-
-### Próximos Passos
-
-1. **Implementar autenticação** (se necessário)
-2. **Adicionar cache local** para markers e rotas
-3. **Implementar sincronização offline**
-4. **Adicionar testes unitários** para o ApiService
-5. **Configurar diferentes ambientes** (dev, staging, prod)
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
