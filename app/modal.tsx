@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -24,13 +24,14 @@ import AddressAutocomplete from '../components/AddressAutocomplete';
 
 export default function RouteModal() {
   const router = useRouter();
+  const mapRef = useRef<MapView>(null);
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [originAddress, setOriginAddress] = useState('');
   const [destinationAddress, setDestinationAddress] = useState('');
-  const [originCoords, setOriginCoords] = useState<{latitude: number; longitude: number} | null>(null);
-  const [destinationCoords, setDestinationCoords] = useState<{latitude: number; longitude: number} | null>(null);
+  const [originCoords, setOriginCoords] = useState<{latitude: number, longitude: number} | null>(null);
+  const [destinationCoords, setDestinationCoords] = useState<{latitude: number, longitude: number} | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [routeData, setRouteData] = useState<RouteResponse | null>(null);
+  const [routeData, setRouteData] = useState<any>(null);
   const [showPopup, setShowPopup] = useState(true);
   const [safetyMarkers, setSafetyMarkers] = useState<SafetyMarker[]>([]);
 
@@ -60,13 +61,37 @@ export default function RouteModal() {
 
   async function loadSafetyMarkers() {
     try {
-      // Tentar carregar markers do backend diretamente
-      const markers = await apiService.getSafetyMarkers();
-      const validMarkers = Array.isArray(markers) ? markers : [];
-      setSafetyMarkers(validMarkers);
-      console.log('Markers carregados do backend:', validMarkers.length);
+      console.log('Iniciando carregamento de markers...');
+      
+      // Testar ambas as implementações
+      console.log('=== TESTANDO FETCH (implementação atual) ===');
+      try {
+        const markersWithFetch = await apiService.getSafetyMarkers();
+        console.log('Fetch - Resposta bruta do backend:', markersWithFetch);
+        console.log('Fetch - Tipo da resposta:', typeof markersWithFetch);
+        console.log('Fetch - É array?:', Array.isArray(markersWithFetch));
+      } catch (fetchError) {
+        console.error('Fetch - Erro:', fetchError);
+      }
+      
+      console.log('=== TESTANDO AXIOS (implementação alternativa) ===');
+      try {
+        const markersWithAxios = await apiService.getSafetyMarkersWithAxios();
+        console.log('Axios - Resposta bruta do backend:', markersWithAxios);
+        console.log('Axios - Tipo da resposta:', typeof markersWithAxios);
+        console.log('Axios - É array?:', Array.isArray(markersWithAxios));
+        
+        // Usar a resposta do Axios se funcionou
+        const validMarkers = Array.isArray(markersWithAxios) ? markersWithAxios : [];
+        setSafetyMarkers(validMarkers);
+        console.log('Markers carregados com Axios:', validMarkers.length, validMarkers);
+      } catch (axiosError) {
+        console.error('Axios - Erro:', axiosError);
+        setSafetyMarkers([]);
+      }
+      
     } catch (error) {
-      console.log('Nenhum marker no backend', error);
+      console.error('Erro geral ao carregar markers:', error);
       setSafetyMarkers([]);
     }
   }
@@ -83,28 +108,28 @@ export default function RouteModal() {
         type: 'danger',
         latitude: baseLatitude + 0.002,
         longitude: baseLongitude + 0.001,
-        description: 'Área de risco'
+        name: 'Área de risco'
       },
       {
         id: '2',
-        type: 'attention',
+        type: 'DANGER',
         latitude: baseLatitude - 0.001,
         longitude: baseLongitude + 0.002,
-        description: 'Atenção redobrada'
+        name: 'Atenção redobrada'
       },
       {
         id: '3',
         type: 'camera',
         latitude: baseLatitude + 0.001,
         longitude: baseLongitude - 0.001,
-        description: 'Câmera de segurança'
+        name: 'Câmera de segurança'
       },
       {
         id: '4',
-        type: 'robery',
+        type: 'robbery',
         latitude: baseLatitude - 0.002,
         longitude: baseLongitude - 0.002,
-        description: 'Local de assaltos'
+        name: 'Local de assaltos'
       }
     ];
   }
@@ -150,18 +175,24 @@ export default function RouteModal() {
         // Usar o backend real
         console.log('Calculando rota via backend...');
         
-        // Usar coordenadas em vez de endereços de texto
-        const originCoordinates = originCoords || (location ? `${location.coords.latitude},${location.coords.longitude}` : originAddress);
-        const destinationCoordinates = destinationCoords ? `${destinationCoords.latitude},${destinationCoords.longitude}` : destinationAddress;
+        // Usar endereços de texto como o backend espera
+        const origin = originAddress || 'Localização atual';
+        const destination = destinationAddress;
         
         const routeResponse = await apiService.calculateRoute(
-          typeof originCoordinates === 'object' ? `${originCoordinates.latitude},${originCoordinates.longitude}` : originCoordinates,
-          destinationCoordinates,
-          undefined,
+          origin,
+          destination,
           'walking'
         );
         setRouteData(routeResponse);
         console.log('Rota calculada com sucesso:', routeResponse);
+        setShowPopup(false);
+        
+        // Ajustar visualização do mapa para mostrar toda a rota
+        const coordinates = processRouteCoordinates(routeResponse);
+        if (coordinates.length > 0) {
+          setTimeout(() => fitMapToRoute(coordinates), 500);
+        }
       } else {
         // Fallback para rota simulada
         console.log('Backend indisponível, usando rota simulada');
@@ -171,10 +202,17 @@ export default function RouteModal() {
           route: generateMockRoute(),
           distance: '2.5 km',
           duration: '8 min',
-          avoidedMarkers: Array.isArray(safetyMarkers) ? safetyMarkers.filter(m => m.type === 'danger' || m.type === 'robery') : []
+          avoidedMarkers: Array.isArray(safetyMarkers) ? safetyMarkers.filter(m => m.type === 'danger' || m.type === 'robbery') : []
         };
         
         setRouteData(mockRoute);
+        setShowPopup(false);
+        
+        // Ajustar visualização do mapa para a rota simulada
+          const coordinates = processRouteCoordinates(mockRoute);
+          if (coordinates.length > 0) {
+            setTimeout(() => fitMapToRoute(coordinates), 500);
+          }
       }
     } catch (error) {
       console.error('Erro ao calcular rota:', error);
@@ -186,7 +224,7 @@ export default function RouteModal() {
           route: generateMockRoute(),
           distance: '2.5 km (simulado)',
           duration: '8 min (simulado)',
-          avoidedMarkers: Array.isArray(safetyMarkers) ? safetyMarkers.filter(m => m.type === 'danger' || m.type === 'robery') : []
+          avoidedMarkers: Array.isArray(safetyMarkers) ? safetyMarkers.filter(m => m.type === 'danger' || m.type === 'robbery') : []
         };
         setRouteData(mockRoute);
       } catch (fallbackError) {
@@ -223,6 +261,98 @@ export default function RouteModal() {
     ];
   }
 
+  function processRouteCoordinates(route: any): RoutePoint[] {
+    console.log('Processando coordenadas da rota:', route);
+    
+    if (!route) {
+      console.log('Rota é null ou undefined');
+      return [];
+    }
+    
+    // Se for um objeto RouteResponse com propriedade route (mock ou resposta processada)
+    if (route.route && typeof route.route !== 'undefined') {
+      console.log('Detectado objeto RouteResponse, acessando propriedade route');
+      return processRouteCoordinates(route.route);
+    }
+    
+    // Se for uma resposta da API do Google Maps
+    if (route.routes && Array.isArray(route.routes) && route.routes.length > 0) {
+      console.log('Detectada resposta da API do Google Maps');
+      const googleRoute = route.routes[0];
+      
+      // Extrair coordenadas dos legs
+      if (googleRoute.legs && Array.isArray(googleRoute.legs)) {
+        const coordinates: RoutePoint[] = [];
+        
+        googleRoute.legs.forEach((leg: any) => {
+          if (leg.steps && Array.isArray(leg.steps)) {
+            leg.steps.forEach((step: any) => {
+              if (step.start_location) {
+                coordinates.push({
+                  latitude: step.start_location.lat,
+                  longitude: step.start_location.lng
+                });
+              }
+              if (step.end_location) {
+                coordinates.push({
+                  latitude: step.end_location.lat,
+                  longitude: step.end_location.lng
+                });
+              }
+            });
+          }
+        });
+        
+        console.log('Extraídas', coordinates.length, 'coordenadas dos legs');
+        return coordinates;
+      }
+      
+      return [];
+    }
+    
+    // Se for um array simples de coordenadas
+    if (Array.isArray(route)) {
+      console.log('Rota é um array com', route.length, 'pontos');
+      return route.map(point => ({
+        latitude: typeof point.latitude === 'string' ? parseFloat(point.latitude) : point.latitude,
+        longitude: typeof point.longitude === 'string' ? parseFloat(point.longitude) : point.longitude
+      }));
+    }
+    
+    // Se for um objeto único com coordenadas
+    if (typeof route === 'object' && route.latitude && route.longitude) {
+      console.log('Rota é um objeto único');
+      return [{
+        latitude: typeof route.latitude === 'string' ? parseFloat(route.latitude) : route.latitude,
+        longitude: typeof route.longitude === 'string' ? parseFloat(route.longitude) : route.longitude
+      }];
+    }
+    
+    console.log('Formato de rota não reconhecido:', typeof route, route);
+    return [];
+  }
+
+  function fitMapToRoute(coordinates: RoutePoint[]) {
+    if (coordinates.length === 0 || !mapRef.current) return;
+    
+    const latitudes = coordinates.map(coord => coord.latitude);
+    const longitudes = coordinates.map(coord => coord.longitude);
+    
+    const minLat = Math.min(...latitudes);
+    const maxLat = Math.max(...latitudes);
+    const minLng = Math.min(...longitudes);
+    const maxLng = Math.max(...longitudes);
+    
+    const padding = 0.01; // Adiciona um pouco de padding
+    
+    mapRef.current.animateToRegion({
+      latitude: (minLat + maxLat) / 2,
+      longitude: (minLng + maxLng) / 2,
+      latitudeDelta: (maxLat - minLat) + padding,
+      longitudeDelta: (maxLng - minLng) + padding,
+    }, 1000);
+  }
+
   function getMarkerIcon(type: string) {
     const icons: { [key: string]: any } = {
       danger: require('../assets/markers/icon_danger.png'),
@@ -245,6 +375,7 @@ export default function RouteModal() {
       {/* Mapa em tela cheia */}
       {location && (
         <MapView
+          ref={mapRef}
           style={styles.fullScreenMap}
           initialRegion={{
             latitude: location.coords.latitude,
@@ -271,7 +402,7 @@ export default function RouteModal() {
                 latitude: marker.latitude,
                 longitude: marker.longitude,
               }}
-              title={marker.description}
+              title={marker.name || 'Marker de segurança'}
             >
               <View style={styles.markerContainer}>
                 <Image
@@ -283,14 +414,56 @@ export default function RouteModal() {
             </Marker>
           ))}
           
-          {/* Rota calculada */}
-          {routeData && (
-            <Polyline
-              coordinates={routeData.route}
-              strokeColor="#D65E75"
-              strokeWidth={4}
-              lineDashPattern={[5, 5]}
-            />
+          {/* Rota calculada - Estilo Waze */}
+          {routeData && (() => {
+            const coordinates = processRouteCoordinates(routeData);
+            return coordinates.length > 0 ? (
+              <>
+                {/* Linha de fundo (sombra) */}
+                <Polyline
+                  coordinates={coordinates}
+                  strokeColor="rgba(0, 0, 0, 0.3)"
+                  strokeWidth={8}
+                />
+                {/* Linha principal da rota */}
+                <Polyline
+                  coordinates={coordinates}
+                  strokeColor="#4285F4"
+                  strokeWidth={6}
+                />
+                {/* Linha interna para dar efeito 3D */}
+                <Polyline
+                  coordinates={coordinates}
+                  strokeColor="#1976D2"
+                  strokeWidth={3}
+                />
+              </>
+            ) : null;
+          })()}
+          
+          {/* Marcadores de origem e destino */}
+          {originCoords && (
+            <Marker
+              coordinate={originCoords}
+              title="Origem"
+              description={originAddress}
+            >
+              <View style={styles.originMarker}>
+                <Text style={styles.markerText}>A</Text>
+              </View>
+            </Marker>
+          )}
+          
+          {destinationCoords && (
+            <Marker
+              coordinate={destinationCoords}
+              title="Destino"
+              description={destinationAddress}
+            >
+              <View style={styles.destinationMarker}>
+                <Text style={styles.markerText}>B</Text>
+              </View>
+            </Marker>
           )}
         </MapView>
       )}
@@ -381,15 +554,36 @@ export default function RouteModal() {
         </View>
       )}
 
-      {/* Informações da rota como overlay */}
+      {/* Informações da rota como overlay - Estilo Waze */}
       {routeData && (
         <View style={styles.routeInfoOverlay}>
-          <Text style={styles.routeInfoText}>
-            Distância: {routeData.distance} • Tempo: {routeData.duration}
-          </Text>
-          <Text style={styles.avoidedText}>
-            {routeData.avoidedMarkers.length} área(s) de risco evitada(s)
-          </Text>
+          <View style={styles.routeMainInfo}>
+            <View style={styles.routeTimeContainer}>
+              <Text style={styles.routeTimeText}>{routeData.duration}</Text>
+              <Text style={styles.routeSubText}>tempo estimado</Text>
+            </View>
+            <View style={styles.routeDistanceContainer}>
+              <Text style={styles.routeDistanceText}>{routeData.distance}</Text>
+              <Text style={styles.routeSubText}>distância total</Text>
+            </View>
+          </View>
+          
+          {(routeData.avoidedMarkers || []).length > 0 && (
+            <View style={styles.avoidedContainer}>
+              <View style={styles.avoidedIcon}>
+                <Text style={styles.avoidedIconText}>⚠️</Text>
+              </View>
+              <Text style={styles.avoidedText}>
+                {(routeData.avoidedMarkers || []).length} área(s) de risco evitada(s)
+              </Text>
+            </View>
+          )}
+          
+          <View style={styles.routeActionContainer}>
+            <TouchableOpacity style={styles.startRouteButton}>
+              <Text style={styles.startRouteText}>🚗 Iniciar Navegação</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     </View>
@@ -539,30 +733,140 @@ const styles = StyleSheet.create({
     bottom: 100,
     left: 20,
     right: 20,
-    backgroundColor: '#f8f9fa',
-    padding: 15,
-    borderRadius: 8,
+    backgroundColor: '#ffffff',
+    padding: 20,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 10,
+    borderTopWidth: 4,
+    borderTopColor: '#4285F4',
+  },
+  routeMainInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 15,
+    paddingBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  routeTimeContainer: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  routeDistanceContainer: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  routeTimeText: {
+    fontSize: 24,
+    fontFamily: 'Poppins-Bold',
+    color: '#4285F4',
+    fontWeight: 'bold',
+  },
+  routeDistanceText: {
+    fontSize: 20,
+    fontFamily: 'Poppins-SemiBold',
+    color: '#1a1a1a',
+    fontWeight: '600',
+  },
+  routeSubText: {
+    fontSize: 12,
+    fontFamily: 'Poppins-Regular',
+    color: '#666',
+    marginTop: 2,
+  },
+  avoidedContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFF5F5',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginBottom: 15,
+    alignSelf: 'center',
+  },
+  avoidedIcon: {
+    marginRight: 6,
+  },
+  avoidedIconText: {
+    fontSize: 16,
+  },
+  avoidedText: {
+    fontSize: 13,
+    fontFamily: 'Poppins-Medium',
+    color: '#D65E75',
+  },
+  routeActionContainer: {
+    alignItems: 'center',
+  },
+  startRouteButton: {
+    backgroundColor: '#4285F4',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 25,
+    shadowColor: '#4285F4',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 6,
+  },
+  startRouteText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontFamily: 'Poppins-SemiBold',
+    fontWeight: '600',
+  },
+  originMarker: {
+    backgroundColor: '#4285F4',
+    borderRadius: 20,
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 3,
+    borderColor: '#ffffff',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 4,
+    elevation: 5,
   },
-  routeInfoText: {
+  destinationMarker: {
+    backgroundColor: '#EA4335',
+    borderRadius: 20,
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 3,
+    borderColor: '#ffffff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  markerText: {
+    color: '#ffffff',
     fontSize: 14,
-    fontFamily: 'Poppins-Medium',
-    color: '#333',
-    textAlign: 'center',
-  },
-  avoidedText: {
-    fontSize: 12,
-    fontFamily: 'Poppins-Regular',
-    color: '#D65E75',
-    textAlign: 'center',
-    marginTop: 5,
+    fontFamily: 'Poppins-Bold',
+    fontWeight: 'bold',
   },
   buttonContainer: {
     flexDirection: 'row',
