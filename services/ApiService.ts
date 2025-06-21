@@ -1,11 +1,15 @@
+import axios, { AxiosResponse } from 'axios';
 import { API_CONFIG, APP_CONFIG } from '../constants/Config';
 
+// Interfaces para os tipos de dados
 export interface SafetyMarker {
   id: string;
-  type: 'danger' | 'attention' | 'camera' | 'safe' | 'lamp' | 'police' | 'robery';
   latitude: number;
   longitude: number;
-  description?: string;
+  type: 'ACCIDENT' | 'ROBBERY' | 'POOR_LIGHTING' | 'DANGER' | 'POLICE' | 'CAMERA' | 'SAFE_ZONE' | 'accident' | 'robbery' | 'poor_lighting' | 'danger' | 'police' | 'camera' | 'safe_zone';
+  name?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface RoutePoint {
@@ -27,7 +31,7 @@ export interface RouteResponse {
   route: RoutePoint[];
   distance: string;
   duration: string;
-  avoidedMarkers: SafetyMarker[];
+  avoidedMarkers?: SafetyMarker[]; // Opcional, pois o backend pode não retornar
 }
 
 class ApiService {
@@ -37,6 +41,7 @@ class ApiService {
   constructor() {
     this.baseUrl = API_CONFIG.BASE_URL;
     this.timeout = APP_CONFIG.REQUEST_TIMEOUT;
+    console.log('ApiService: Configurado com BASE_URL:', this.baseUrl);
   }
 
   private async makeRequest<T>(
@@ -80,7 +85,50 @@ class ApiService {
 
   // Buscar todos os markers
   async getSafetyMarkers(): Promise<SafetyMarker[]> {
-      return await this.makeRequest<SafetyMarker[]>(API_CONFIG.ENDPOINTS.MARKERS);
+    try {
+      console.log('ApiService: Fazendo requisição para:', `${this.baseUrl}${API_CONFIG.ENDPOINTS.MARKERS}`);
+      const result = await this.makeRequest<SafetyMarker[]>(API_CONFIG.ENDPOINTS.MARKERS);
+      console.log('ApiService: Resposta recebida:', result);
+      return result;
+    } catch (error) {
+      console.error('ApiService: Erro na requisição de markers:', error);
+      throw error;
+    }
+  }
+
+  // Versão alternativa usando Axios para comparação
+  async getSafetyMarkersWithAxios(): Promise<SafetyMarker[]> {
+    try {
+      const url = `${this.baseUrl}${API_CONFIG.ENDPOINTS.MARKERS}`;
+      console.log('ApiService (Axios): Fazendo requisição para:', url);
+      
+      const response: AxiosResponse<SafetyMarker[]> = await axios.get(url, {
+        timeout: this.timeout,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+      
+      console.log('ApiService (Axios): Status da resposta:', response.status);
+      console.log('ApiService (Axios): Headers da resposta:', response.headers);
+      console.log('ApiService (Axios): Dados recebidos:', response.data);
+      
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        console.error('ApiService (Axios): Erro Axios:', {
+          message: error.message,
+          status: error.response?.status,
+          statusText: error.response?.statusText,
+          data: error.response?.data,
+          headers: error.response?.headers
+        });
+      } else {
+        console.error('ApiService (Axios): Erro desconhecido:', error);
+      }
+      throw error;
+    }
   }
 
   // Buscar markers por tipo
@@ -116,23 +164,24 @@ class ApiService {
   async calculateRoute(
     origin: string, 
     destination: string, 
-    waypoints?: string, 
     mode: 'driving' | 'walking' | 'bicycling' | 'transit' = 'walking'
   ): Promise<RouteResponse> {
     try {
-      const requestBody = {
+      const params = new URLSearchParams({
         origin,
         destination,
         mode,
-      };
+      });
       
-      return await this.makeRequest<RouteResponse>(
-        API_CONFIG.ENDPOINTS.ROUTE,
-        {
-          method: 'POST',
-          body: JSON.stringify(requestBody)
-        }
+      const response = await this.makeRequest<RouteResponse>(
+        `${API_CONFIG.ENDPOINTS.ROUTE}?${params.toString()}`
       );
+      
+      // Garantir que avoidedMarkers seja sempre um array
+      return {
+        ...response,
+        avoidedMarkers: response.avoidedMarkers || []
+      };
     } catch (error) {
       console.error('Erro ao calcular rota:', error);
       throw error;
