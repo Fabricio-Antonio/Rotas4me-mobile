@@ -151,6 +151,8 @@ const styles = StyleSheet.create({
     height: "40%",
     marginVertical: 10,
     marginTop: 10,
+    borderRadius: 15,
+    overflow: "hidden",
   },
   header: {
     width: "100%",
