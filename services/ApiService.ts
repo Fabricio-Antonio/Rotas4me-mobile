@@ -194,6 +194,94 @@ class ApiService {
     // Se houver erro, será tratado nos métodos individuais
     return true;
   }
+
+  // Enviar SMS de emergência
+  async sendEmergencySMS(userLocation?: { latitude: number; longitude: number }): Promise<{ success: boolean; message: string }> {
+    try {
+      let locationMessage = 'Localização não disponível';
+      
+      if (userLocation) {
+        // Usar geocodificação reversa para obter o endereço
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${userLocation.latitude}&lon=${userLocation.longitude}&addressdetails=1`,
+            {
+              headers: {
+                'User-Agent': 'Rotas4me-mobile/1.0'
+              }
+            }
+          );
+          
+          if (!response.ok) {
+            throw new Error(`Geocoding API error: ${response.status}`);
+          }
+          
+          const contentType = response.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('Invalid response format from geocoding API');
+          }
+          
+          const data = await response.json();
+          
+          if (data && data.display_name) {
+            locationMessage = data.display_name;
+          } else {
+            locationMessage = `Lat: ${userLocation.latitude}, Lon: ${userLocation.longitude}`;
+          }
+        } catch (geocodeError) {
+          console.error('Erro na geocodificação:', geocodeError);
+          locationMessage = `Lat: ${userLocation.latitude}, Lon: ${userLocation.longitude}`;
+        }
+      }
+      
+      const requestBody = {
+        to: '+5562992534294',
+        body: `EMERGÊNCIA: Pedido de ajuda enviado. Localização: ${locationMessage}`
+      };
+      
+      console.log('Enviando SMS com dados:', requestBody);
+      console.log('URL da API:', `${this.baseUrl}/sms/send`);
+      
+      try {
+        const response = await this.makeRequest<{ success: boolean; message: string }>(
+          '/sms/send',
+          {
+            method: 'POST',
+            body: JSON.stringify(requestBody)
+          }
+        );
+        
+        console.log('Resposta da API SMS:', response);
+        return response;
+      } catch (apiError) {
+        console.error('Erro detalhado da API SMS:', apiError);
+        
+        // Tentar fazer uma requisição manual para debug
+        try {
+          const debugResponse = await fetch(`${this.baseUrl}/sms/send`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody)
+          });
+          
+          console.log('Status da resposta debug:', debugResponse.status);
+          console.log('Headers da resposta debug:', debugResponse.headers);
+          
+          const debugText = await debugResponse.text();
+          console.log('Corpo da resposta debug:', debugText);
+        } catch (debugError) {
+          console.error('Erro no debug da requisição:', debugError);
+        }
+        
+        throw apiError;
+      }
+    } catch (error) {
+      console.error('Erro ao enviar SMS de emergência:', error);
+      throw error;
+    }
+  }
 }
 
 export const apiService = new ApiService();
