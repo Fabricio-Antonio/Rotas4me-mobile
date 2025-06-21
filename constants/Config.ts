@@ -51,8 +51,8 @@ export const API_CONFIG = {
 
 // Configurações do Google Maps e Places
 export const GOOGLE_MAPS_CONFIG = {
-  API_KEY: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyBzbZbLPhU2Iq4AXR7RqDxRCy0er492Oig',
-  PLACES_API_KEY: process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY || 'AIzaSyBzbZbLPhU2Iq4AXR7RqDxRCy0er492Oig',
+  API_KEY: process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY ,
+  PLACES_API_KEY: process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY ,
 };
 
 // Configurações gerais

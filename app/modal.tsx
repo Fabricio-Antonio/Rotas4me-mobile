@@ -822,16 +822,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   routeTimeText: {
-    fontSize: 24,
-    fontFamily: 'Poppins-Bold',
-    color: '#4285F4',
+    fontSize: 18,
+    fontFamily: 'Poppins-SemiBold',
+    color: '#33363F',
     fontWeight: 'bold',
   },
   routeDistanceText: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: 'Poppins-SemiBold',
-    color: '#1a1a1a',
-    fontWeight: '600',
+    color: '#33363F',
+    fontWeight: 'bold',
   },
   routeSubText: {
     fontSize: 12,

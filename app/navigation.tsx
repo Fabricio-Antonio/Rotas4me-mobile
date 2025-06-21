@@ -253,7 +253,7 @@ export default function NavigationScreen() {
                    latitude: point.latitude,
                    longitude: point.longitude,
                  }))}
-                strokeColor="#d6d6d6"
+                strokeColor="#D65E75"
                 strokeWidth={6}
                 lineJoin="round"
                 lineCap="round"
