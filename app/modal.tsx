@@ -17,9 +17,8 @@ import {
   getCurrentPositionAsync,
   LocationObject,
 } from 'expo-location';
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { apiService, SafetyMarker, RouteResponse, RoutePoint } from '../services/ApiService';
-import { GOOGLE_MAPS_CONFIG } from '../constants/Config';
+import AddressAutocomplete from '../components/AddressAutocomplete';
 
 // Interfaces movidas para ApiService
 
@@ -28,6 +27,8 @@ export default function RouteModal() {
   const [location, setLocation] = useState<LocationObject | null>(null);
   const [originAddress, setOriginAddress] = useState('');
   const [destinationAddress, setDestinationAddress] = useState('');
+  const [originCoords, setOriginCoords] = useState<{latitude: number; longitude: number} | null>(null);
+  const [destinationCoords, setDestinationCoords] = useState<{latitude: number; longitude: number} | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [routeData, setRouteData] = useState<RouteResponse | null>(null);
   const [showPopup, setShowPopup] = useState(true);
@@ -50,6 +51,10 @@ export default function RouteModal() {
       const currentPosition = await getCurrentPositionAsync();
       setLocation(currentPosition);
       setOriginAddress('Sua localização atual');
+      setOriginCoords({
+        latitude: currentPosition.coords.latitude,
+        longitude: currentPosition.coords.longitude,
+      });
     }
   }
 
@@ -57,8 +62,9 @@ export default function RouteModal() {
     try {
       // Tentar carregar markers do backend diretamente
       const markers = await apiService.getSafetyMarkers();
-      setSafetyMarkers(markers || []);
-      console.log('Markers carregados do backend:', markers?.length || 0);
+      const validMarkers = Array.isArray(markers) ? markers : [];
+      setSafetyMarkers(validMarkers);
+      console.log('Markers carregados do backend:', validMarkers.length);
     } catch (error) {
       console.log('Nenhum marker no backend', error);
       setSafetyMarkers([]);
@@ -103,13 +109,38 @@ export default function RouteModal() {
     ];
   }
 
+  function swapAddresses() {
+    const tempAddress = originAddress;
+    const tempCoords = originCoords;
+    
+    setOriginAddress(destinationAddress);
+    setOriginCoords(destinationCoords);
+    setDestinationAddress(tempAddress);
+    setDestinationCoords(tempCoords);
+  }
+
   async function calculateRoute() {
     if (!originAddress || !destinationAddress) {
       Alert.alert('Erro', 'Por favor, preencha origem e destino');
       return;
     }
 
+    if (!originCoords && originAddress !== 'Sua localização atual') {
+      Alert.alert('Erro', 'Por favor, selecione um endereço válido para origem');
+      return;
+    }
+
+    if (!destinationCoords) {
+      Alert.alert('Erro', 'Por favor, selecione um endereço válido para destino');
+      return;
+    }
+
     setIsLoading(true);
+    console.log('Calculando rota:', {
+      origem: originAddress,
+      destino: destinationAddress,
+      coordenadas: { origem: originCoords, destino: destinationCoords }
+    });
     
     try {
       // Verificar se o backend está disponível
@@ -118,7 +149,17 @@ export default function RouteModal() {
       if (isBackendAvailable) {
         // Usar o backend real
         console.log('Calculando rota via backend...');
-        const routeResponse = await apiService.calculateRoute(originAddress, destinationAddress, undefined, 'walking');
+        
+        // Usar coordenadas em vez de endereços de texto
+        const originCoordinates = originCoords || (location ? `${location.coords.latitude},${location.coords.longitude}` : originAddress);
+        const destinationCoordinates = destinationCoords ? `${destinationCoords.latitude},${destinationCoords.longitude}` : destinationAddress;
+        
+        const routeResponse = await apiService.calculateRoute(
+          typeof originCoordinates === 'object' ? `${originCoordinates.latitude},${originCoordinates.longitude}` : originCoordinates,
+          destinationCoordinates,
+          undefined,
+          'walking'
+        );
         setRouteData(routeResponse);
         console.log('Rota calculada com sucesso:', routeResponse);
       } else {
@@ -130,7 +171,7 @@ export default function RouteModal() {
           route: generateMockRoute(),
           distance: '2.5 km',
           duration: '8 min',
-          avoidedMarkers: safetyMarkers?.filter(m => m.type === 'danger' || m.type === 'robery') ?? []
+          avoidedMarkers: Array.isArray(safetyMarkers) ? safetyMarkers.filter(m => m.type === 'danger' || m.type === 'robery') : []
         };
         
         setRouteData(mockRoute);
@@ -145,7 +186,7 @@ export default function RouteModal() {
           route: generateMockRoute(),
           distance: '2.5 km (simulado)',
           duration: '8 min (simulado)',
-          avoidedMarkers: safetyMarkers?.filter(m => m.type === 'danger' || m.type === 'robery') ?? []
+          avoidedMarkers: Array.isArray(safetyMarkers) ? safetyMarkers.filter(m => m.type === 'danger' || m.type === 'robery') : []
         };
         setRouteData(mockRoute);
       } catch (fallbackError) {
@@ -271,99 +312,39 @@ export default function RouteModal() {
           <View style={styles.inputContainer}>
             <View style={styles.inputWrapper}>
               <View style={styles.locationDot} />
-              {GOOGLE_MAPS_CONFIG.PLACES_API_KEY ? (
-                <GooglePlacesAutocomplete
-                  placeholder="Selecione sua localização"
-                  onPress={(data, details = null) => {
-                    try {
-                      setOriginAddress(data?.description || '');
-                    } catch (error) {
-                      console.error('Erro ao selecionar origem:', error);
-                    }
-                  }}
-                  query={{
-                    key: GOOGLE_MAPS_CONFIG.PLACES_API_KEY,
-                    language: 'pt-BR',
-                    components: 'country:br',
-                  }}
-                  styles={{
-                    textInputContainer: styles.autocompleteContainer,
-                    textInput: styles.autocompleteInput,
-                    listView: styles.autocompleteList,
-                    row: styles.autocompleteRow,
-                    description: styles.autocompleteDescription,
-                  }}
-                  textInputProps={{
-                    placeholderTextColor: '#999',
-                  }}
-                  fetchDetails={true}
-                  enablePoweredByContainer={false}
-                  debounce={300}
-                  onFail={(error) => {
-                     console.error('GooglePlacesAutocomplete error:', error);
-                   }}
-                />
-              ) : (
-                <TextInput
-                  style={styles.autocompleteInput}
-                  placeholder="Selecione sua localização"
-                  placeholderTextColor="#999"
-                  value={originAddress}
-                  onChangeText={setOriginAddress}
-                />
-              )}
+              <AddressAutocomplete
+                placeholder="Selecione sua localização"
+                value={originAddress}
+                onAddressSelect={(address, coordinates) => {
+                  setOriginAddress(address);
+                  if (coordinates) {
+                    setOriginCoords(coordinates);
+                  }
+                }}
+                inputStyle={styles.autocompleteInput}
+              />
             </View>
             
             <View style={styles.swapContainer}>
               <View style={styles.swapLine} />
-              <TouchableOpacity style={styles.swapButton}>
+              <TouchableOpacity style={styles.swapButton} onPress={swapAddresses}>
                 <Text style={styles.swapIcon}>⇅</Text>
               </TouchableOpacity>
             </View>
             
             <View style={styles.inputWrapper}>
               <View style={[styles.locationDot, styles.destinationDot]} />
-              {GOOGLE_MAPS_CONFIG.PLACES_API_KEY ? (
-                <GooglePlacesAutocomplete
-                  placeholder="Selecione o seu destino"
-                  onPress={(data, details = null) => {
-                    try {
-                      setDestinationAddress(data?.description || '');
-                    } catch (error) {
-                      console.error('Erro ao selecionar destino:', error);
-                    }
-                  }}
-                  query={{
-                    key: GOOGLE_MAPS_CONFIG.PLACES_API_KEY,
-                    language: 'pt-BR',
-                    components: 'country:br',
-                  }}
-                  styles={{
-                    textInputContainer: styles.autocompleteContainer,
-                    textInput: styles.autocompleteInput,
-                    listView: styles.autocompleteList,
-                    row: styles.autocompleteRow,
-                    description: styles.autocompleteDescription,
-                  }}
-                  textInputProps={{
-                    placeholderTextColor: '#999',
-                  }}
-                  fetchDetails={true}
-                  enablePoweredByContainer={false}
-                  debounce={300}
-                  onFail={(error) => {
-                     console.error('GooglePlacesAutocomplete error:', error);
-                   }}
-                />
-              ) : (
-                <TextInput
-                  style={styles.autocompleteInput}
-                  placeholder="Selecione o seu destino"
-                  placeholderTextColor="#999"
-                  value={destinationAddress}
-                  onChangeText={setDestinationAddress}
-                />
-              )}
+              <AddressAutocomplete
+                placeholder="Selecione o seu destino"
+                value={destinationAddress}
+                onAddressSelect={(address, coordinates) => {
+                  setDestinationAddress(address);
+                  if (coordinates) {
+                    setDestinationCoords(coordinates);
+                  }
+                }}
+                inputStyle={styles.autocompleteInput}
+              />
             </View>
           </View>
 
@@ -511,11 +492,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     color: '#333',
   },
-  // Estilos para GooglePlacesAutocomplete
-  autocompleteContainer: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
   autocompleteInput: {
     fontSize: 14,
     fontFamily: 'Poppins-Regular',
@@ -525,31 +501,6 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     paddingRight: 0,
     margin: 0,
-  },
-  autocompleteList: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    marginTop: 5,
-    maxHeight: 200,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  autocompleteRow: {
-    backgroundColor: '#fff',
-    padding: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  autocompleteDescription: {
-    fontSize: 14,
-    fontFamily: 'Poppins-Regular',
-    color: '#333',
   },
   swapContainer: {
     alignItems: 'center',

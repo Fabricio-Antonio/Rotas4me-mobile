@@ -120,14 +120,18 @@ class ApiService {
     mode: 'driving' | 'walking' | 'bicycling' | 'transit' = 'walking'
   ): Promise<RouteResponse> {
     try {
-      const params = new URLSearchParams({
+      const requestBody = {
         origin,
         destination,
         mode,
-        ...(waypoints && { waypoints })
-      });
+      };
+      
       return await this.makeRequest<RouteResponse>(
-        `${API_CONFIG.ENDPOINTS.ROUTE}?${params.toString()}`
+        API_CONFIG.ENDPOINTS.ROUTE,
+        {
+          method: 'POST',
+          body: JSON.stringify(requestBody)
+        }
       );
     } catch (error) {
       console.error('Erro ao calcular rota:', error);
