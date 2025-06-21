@@ -3,14 +3,16 @@ import { Platform } from 'react-native';
 
 // Função para detectar a URL correta do backend
 function getBackendUrl(): string {
-  // Prioridade: variáveis de ambiente
-  if (Constants.expoConfig?.extra?.backendUrl) {
-    console.log('Backend URL (app.json):', Constants.expoConfig.extra.backendUrl);
-    return Constants.expoConfig.extra.backendUrl;
-  }
+  // Prioridade 1: variável de ambiente .env (produção)
   if (process.env.EXPO_PUBLIC_BACKEND_URL) {
     console.log('Backend URL (env):', process.env.EXPO_PUBLIC_BACKEND_URL);
     return process.env.EXPO_PUBLIC_BACKEND_URL;
+  }
+  
+  // Prioridade 2: configuração do app.json (desenvolvimento)
+  if (Constants.expoConfig?.extra?.backendUrl) {
+    console.log('Backend URL (app.json):', Constants.expoConfig.extra.backendUrl);
+    return Constants.expoConfig.extra.backendUrl;
   }
   
   // Para desenvolvimento: detectar se é simulador ou dispositivo físico

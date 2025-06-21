@@ -8,6 +8,8 @@ import {
   Alert,
   ActivityIndicator,
   Image,
+  Linking,
+  Platform,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useFonts } from 'expo-font';
@@ -184,8 +186,23 @@ export default function RouteModal() {
           destination,
           'walking'
         );
-        setRouteData(routeResponse);
-        console.log('Rota calculada com sucesso:', routeResponse);
+        
+        // Debug: verificar dados recebidos
+        console.log('Dados da rota recebidos:', {
+          distance: routeResponse.distance,
+          duration: routeResponse.duration,
+          route: routeResponse.route ? 'presente' : 'ausente'
+        });
+        
+        // Garantir que temos dados válidos ou usar fallback
+        const processedRouteData = {
+          ...routeResponse,
+          distance: routeResponse.distance || 'Calculando...',
+          duration: routeResponse.duration || 'Calculando...'
+        };
+        
+        setRouteData(processedRouteData);
+        console.log('Rota calculada com sucesso:', processedRouteData);
         setShowPopup(false);
         
         // Ajustar visualização do mapa para mostrar toda a rota
@@ -194,7 +211,6 @@ export default function RouteModal() {
           setTimeout(() => fitMapToRoute(coordinates), 500);
         }
       } else {
-        // Fallback para rota simulada
         console.log('Backend indisponível, usando rota simulada');
         await new Promise(resolve => setTimeout(resolve, 1000)); // Simular delay
         
@@ -208,7 +224,6 @@ export default function RouteModal() {
         setRouteData(mockRoute);
         setShowPopup(false);
         
-        // Ajustar visualização do mapa para a rota simulada
           const coordinates = processRouteCoordinates(mockRoute);
           if (coordinates.length > 0) {
             setTimeout(() => fitMapToRoute(coordinates), 500);
@@ -428,13 +443,13 @@ export default function RouteModal() {
                 {/* Linha principal da rota */}
                 <Polyline
                   coordinates={coordinates}
-                  strokeColor="#4285F4"
+                  strokeColor="#D65E75"
                   strokeWidth={6}
                 />
                 {/* Linha interna para dar efeito 3D */}
                 <Polyline
                   coordinates={coordinates}
-                  strokeColor="#1976D2"
+                  strokeColor="#D65E75"
                   strokeWidth={3}
                 />
               </>
@@ -442,29 +457,38 @@ export default function RouteModal() {
           })()}
           
           {/* Marcadores de origem e destino */}
-          {originCoords && (
-            <Marker
-              coordinate={originCoords}
-              title="Origem"
-              description={originAddress}
-            >
-              <View style={styles.originMarker}>
-                <Text style={styles.markerText}>A</Text>
-              </View>
-            </Marker>
-          )}
-          
-          {destinationCoords && (
-            <Marker
-              coordinate={destinationCoords}
-              title="Destino"
-              description={destinationAddress}
-            >
-              <View style={styles.destinationMarker}>
-                <Text style={styles.markerText}>B</Text>
-              </View>
-            </Marker>
-          )}
+          {routeData && (() => {
+            const coordinates = processRouteCoordinates(routeData);
+            if (coordinates.length > 0) {
+              const startPoint = coordinates[0];
+              const endPoint = coordinates[coordinates.length - 1];
+              
+              return (
+                <>
+                  <Marker
+                    coordinate={startPoint}
+                    title="Origem"
+                    description={originAddress}
+                  >
+                    <View style={styles.originMarker}>
+                      <Text style={styles.markerText}>A</Text>
+                    </View>
+                  </Marker>
+                  
+                  <Marker
+                    coordinate={endPoint}
+                    title="Destino"
+                    description={destinationAddress}
+                  >
+                    <View style={styles.destinationMarker}>
+                      <Text style={styles.markerText}>B</Text>
+                    </View>
+                  </Marker>
+                </>
+              );
+            }
+            return null;
+          })()}
         </MapView>
       )}
 
@@ -559,11 +583,11 @@ export default function RouteModal() {
         <View style={styles.routeInfoOverlay}>
           <View style={styles.routeMainInfo}>
             <View style={styles.routeTimeContainer}>
-              <Text style={styles.routeTimeText}>{routeData.duration}</Text>
+              <Text style={styles.routeTimeText}>{routeData.duration || 'Calculando...'}</Text>
               <Text style={styles.routeSubText}>tempo estimado</Text>
             </View>
             <View style={styles.routeDistanceContainer}>
-              <Text style={styles.routeDistanceText}>{routeData.distance}</Text>
+              <Text style={styles.routeDistanceText}>{routeData.distance || 'Calculando...'}</Text>
               <Text style={styles.routeSubText}>distância total</Text>
             </View>
           </View>
@@ -580,7 +604,41 @@ export default function RouteModal() {
           )}
           
           <View style={styles.routeActionContainer}>
-            <TouchableOpacity style={styles.startRouteButton}>
+            <TouchableOpacity 
+              style={styles.startRouteButton}
+              onPress={() => {
+                try {
+                  // Coordenadas de origem e destino
+                  const coordinates = processRouteCoordinates(routeData);
+                  if (coordinates.length === 0) {
+                    Alert.alert('Erro', 'Dados da rota não disponíveis.');
+                    return;
+                  }
+                  
+                  const originCoordinate = coordinates[0];
+                  const destinationCoordinate = coordinates[coordinates.length - 1];
+                  
+                  // Navegar para a tela de navegação nativa
+                  const navigationRouteData = {
+                    origin: originCoordinate,
+                    destination: destinationCoordinate,
+                    route: coordinates,
+                    distance: routeData.distance,
+                    duration: routeData.duration
+                  };
+                  
+                  router.push({
+                    pathname: '/navigation',
+                    params: {
+                      routeData: JSON.stringify(navigationRouteData),
+                    },
+                  });
+                } catch (error) {
+                  console.error('Erro ao iniciar navegação:', error);
+                  Alert.alert('Erro', 'Não foi possível iniciar a navegação.');
+                }
+              }}
+            >
               <Text style={styles.startRouteText}>🚗 Iniciar Navegação</Text>
             </TouchableOpacity>
           </View>
@@ -807,11 +865,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   startRouteButton: {
-    backgroundColor: '#4285F4',
+    backgroundColor: '#D65E75',
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 25,
-    shadowColor: '#4285F4',
+    shadowColor: '#D65E75',
     shadowOffset: {
       width: 0,
       height: 3,
@@ -827,7 +885,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   originMarker: {
-    backgroundColor: '#4285F4',
+    backgroundColor: '#D65E75',
     borderRadius: 20,
     width: 32,
     height: 32,
@@ -845,7 +903,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   destinationMarker: {
-    backgroundColor: '#EA4335',
+    backgroundColor: '#B54A61',
     borderRadius: 20,
     width: 32,
     height: 32,
