@@ -77,7 +77,7 @@ export default function RouteEvaluationScreen() {
 
   useEffect(() => {
     getLocationAsync();
-    loadSafetyMarkers();
+    // loadSafetyMarkers(); // Comentado temporariamente - backend não disponível
     loadMockEvaluations();
   }, []);
 
@@ -91,9 +91,14 @@ export default function RouteEvaluationScreen() {
 
   async function loadSafetyMarkers() {
     try {
-      const markers = await apiService.getSafetyMarkers();
-      const validMarkers = Array.isArray(markers) ? markers : [];
-      setSafetyMarkers(validMarkers);
+      // Comentado temporariamente devido ao erro de conexão com o backend
+      // const markers = await apiService.getSafetyMarkers();
+      // const validMarkers = Array.isArray(markers) ? markers : [];
+      // setSafetyMarkers(validMarkers);
+      
+      // Usando array vazio temporariamente
+      setSafetyMarkers([]);
+      console.log('Markers desabilitados temporariamente - backend não disponível');
     } catch (error) {
       console.log('Nenhum marker no backend', error);
       setSafetyMarkers([]);
