@@ -472,7 +472,7 @@ export default function RouteEvaluationScreen() {
         <View style={styles.searchContainer}>
           <TextInput
             style={styles.searchInput}
-            placeholder="Buscar avaliações por local, destino ou características..."
+            placeholder="Buscar avaliações..."
             placeholderTextColor="#999"
             value={searchQuery}
             onChangeText={setSearchQuery}
