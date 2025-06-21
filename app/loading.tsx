@@ -13,7 +13,7 @@ export default function LoadingScreen() {
 
   useEffect(() => {
     if (loaded) {
-      // Aguarda 2 segundos antes de navegar para a tela de splash
+  
       const timer = setTimeout(() => {
         router.replace('/splash');
       }, 2000);

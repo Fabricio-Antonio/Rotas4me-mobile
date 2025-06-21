@@ -22,7 +22,7 @@ import {
 import { apiService, SafetyMarker, RouteResponse, RoutePoint } from '../services/ApiService';
 import AddressAutocomplete from '../components/AddressAutocomplete';
 
-// Interfaces movidas para ApiService
+
 
 export default function RouteModal() {
   const router = useRouter();
@@ -53,7 +53,7 @@ export default function RouteModal() {
     if (granted) {
       const currentPosition = await getCurrentPositionAsync();
       setLocation(currentPosition);
-      setOriginAddress('Sua localização atual');
+      setOriginAddress('');
       setOriginCoords({
         latitude: currentPosition.coords.latitude,
         longitude: currentPosition.coords.longitude,
@@ -65,7 +65,7 @@ export default function RouteModal() {
     try {
       console.log('Iniciando carregamento de markers...');
       
-      // Testar ambas as implementações
+
       console.log('=== TESTANDO FETCH (implementação atual) ===');
       try {
         const markersWithFetch = await apiService.getSafetyMarkers();
@@ -83,7 +83,7 @@ export default function RouteModal() {
         console.log('Axios - Tipo da resposta:', typeof markersWithAxios);
         console.log('Axios - É array?:', Array.isArray(markersWithAxios));
         
-        // Usar a resposta do Axios se funcionou
+
         const validMarkers = Array.isArray(markersWithAxios) ? markersWithAxios : [];
         setSafetyMarkers(validMarkers);
         console.log('Markers carregados com Axios:', validMarkers.length, validMarkers);
@@ -152,7 +152,7 @@ export default function RouteModal() {
       return;
     }
 
-    if (!originCoords && originAddress !== 'Sua localização atual') {
+    if (!originCoords && originAddress !== '') {
       Alert.alert('Erro', 'Por favor, selecione um endereço válido para origem');
       return;
     }
@@ -170,14 +170,14 @@ export default function RouteModal() {
     });
     
     try {
-      // Verificar se o backend está disponível
+
       const isBackendAvailable = await apiService.healthCheck();
       
       if (isBackendAvailable) {
-        // Usar o backend real
+
         console.log('Calculando rota via backend...');
         
-        // Usar endereços de texto como o backend espera
+
         const origin = originAddress || 'Localização atual';
         const destination = destinationAddress;
         
@@ -187,14 +187,14 @@ export default function RouteModal() {
           'walking'
         );
         
-        // Debug: verificar dados recebidos
+
         console.log('Dados da rota recebidos:', {
           distance: routeResponse.distance,
           duration: routeResponse.duration,
           route: routeResponse.route ? 'presente' : 'ausente'
         });
         
-        // Garantir que temos dados válidos ou usar fallback
+
         const processedRouteData = {
           ...routeResponse,
           distance: routeResponse.distance || 'Calculando...',
@@ -205,14 +205,14 @@ export default function RouteModal() {
         console.log('Rota calculada com sucesso:', processedRouteData);
         setShowPopup(false);
         
-        // Ajustar visualização do mapa para mostrar toda a rota
+
         const coordinates = processRouteCoordinates(routeResponse);
         if (coordinates.length > 0) {
           setTimeout(() => fitMapToRoute(coordinates), 500);
         }
       } else {
         console.log('Backend indisponível, usando rota simulada');
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simular delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
         
         const mockRoute: RouteResponse = {
           route: generateMockRoute(),
@@ -258,7 +258,7 @@ export default function RouteModal() {
       longitude: location.coords.longitude,
     };
     
-    // Gerar uma rota simulada que evita os markers perigosos
+
     return [
       start,
       {
@@ -284,18 +284,18 @@ export default function RouteModal() {
       return [];
     }
     
-    // Se for um objeto RouteResponse com propriedade route (mock ou resposta processada)
+
     if (route.route && typeof route.route !== 'undefined') {
       console.log('Detectado objeto RouteResponse, acessando propriedade route');
       return processRouteCoordinates(route.route);
     }
     
-    // Se for uma resposta da API do Google Maps
+
     if (route.routes && Array.isArray(route.routes) && route.routes.length > 0) {
       console.log('Detectada resposta da API do Google Maps');
       const googleRoute = route.routes[0];
       
-      // Extrair coordenadas dos legs
+
       if (googleRoute.legs && Array.isArray(googleRoute.legs)) {
         const coordinates: RoutePoint[] = [];
         
@@ -325,7 +325,7 @@ export default function RouteModal() {
       return [];
     }
     
-    // Se for um array simples de coordenadas
+
     if (Array.isArray(route)) {
       console.log('Rota é um array com', route.length, 'pontos');
       return route.map(point => ({
@@ -334,7 +334,7 @@ export default function RouteModal() {
       }));
     }
     
-    // Se for um objeto único com coordenadas
+
     if (typeof route === 'object' && route.latitude && route.longitude) {
       console.log('Rota é um objeto único');
       return [{
@@ -358,7 +358,7 @@ export default function RouteModal() {
     const minLng = Math.min(...longitudes);
     const maxLng = Math.max(...longitudes);
     
-    const padding = 0.01; // Adiciona um pouco de padding
+    const padding = 0.01;
     
     mapRef.current.animateToRegion({
       latitude: (minLat + maxLat) / 2,
@@ -370,7 +370,6 @@ export default function RouteModal() {
 
   function getMarkerIcon(type: string) {
     const icons: { [key: string]: any } = {
-      // Tipos originais (mantidos para compatibilidade)
       danger: require('../assets/markers/icon_danger.png'),
       attention: require('../assets/markers/icon_attention.png'),
       camera: require('../assets/markers/icon_camera.png'),
@@ -378,9 +377,6 @@ export default function RouteModal() {
       lamp: require('../assets/markers/icon_lamp.png'),
       police: require('../assets/markers/icon_police.png'),
       robery: require('../assets/markers/icon_robery.png'),
-      
-      // Novos tipos do enum MarkerType do backend
-      // Marcadores de perigo/insegurança
       POOR_LIGHTING: require('../assets/markers/icon_lamp.png'),
       SUSPECTED_DRUG_TRAFFICKING: require('../assets/markers/icon_danger.png'),
       HARASSMENT_REPORTS: require('../assets/markers/icon_attention.png'),
@@ -391,8 +387,6 @@ export default function RouteModal() {
       UNSAFE_BUS_STOP: require('../assets/markers/icon_attention.png'),
       NIGHT_DANGER_ZONE: require('../assets/markers/icon_danger.png'),
       WEEKEND_RISK_AREA: require('../assets/markers/icon_attention.png'),
-      
-      // Marcadores de segurança
       SAFE_SPOT: require('../assets/markers/icon_safe.png'),
       SECURITY_CAMERA: require('../assets/markers/icon_camera.png'),
       EMERGENCY_BUTTON: require('../assets/markers/icon_police.png'),
@@ -407,7 +401,7 @@ export default function RouteModal() {
 
   return (
     <View style={styles.container}>
-      {/* Mapa em tela cheia */}
+      
       {location && (
         <MapView
           ref={mapRef}
@@ -419,7 +413,7 @@ export default function RouteModal() {
             longitudeDelta: 0.01,
           }}
         >
-          {/* Marker da localização atual */}
+
           <Marker
             coordinate={{
               latitude: location.coords.latitude,
@@ -429,7 +423,7 @@ export default function RouteModal() {
             pinColor="blue"
           />
           
-          {/* Markers de segurança */}
+
           {safetyMarkers?.map((marker) => (
             <Marker
               key={marker.id}
@@ -449,24 +443,24 @@ export default function RouteModal() {
             </Marker>
           ))}
           
-          {/* Rota calculada - Estilo Waze */}
+
           {routeData && (() => {
             const coordinates = processRouteCoordinates(routeData);
             return coordinates.length > 0 ? (
               <>
-                {/* Linha de fundo (sombra) */}
+
                 <Polyline
                   coordinates={coordinates}
                   strokeColor="rgba(0, 0, 0, 0.3)"
                   strokeWidth={8}
                 />
-                {/* Linha principal da rota */}
+
                 <Polyline
                   coordinates={coordinates}
                   strokeColor="#D65E75"
                   strokeWidth={6}
                 />
-                {/* Linha interna para dar efeito 3D */}
+
                 <Polyline
                   coordinates={coordinates}
                   strokeColor="#D65E75"
@@ -476,7 +470,7 @@ export default function RouteModal() {
             ) : null;
           })()}
           
-          {/* Marcadores de origem e destino */}
+
           {routeData && (() => {
             const coordinates = processRouteCoordinates(routeData);
             if (coordinates.length > 0) {
@@ -512,7 +506,7 @@ export default function RouteModal() {
         </MapView>
       )}
 
-      {/* Popup sobreposto */}
+
       {showPopup && (
         <View style={styles.popupOverlay}>
           <View style={styles.popup}>
@@ -589,7 +583,7 @@ export default function RouteModal() {
       </View>
       )}
 
-      {/* Botão de voltar quando popup está fechado */}
+
       {!showPopup && (
         <View style={styles.backButtonContainer}>
           <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
@@ -598,7 +592,7 @@ export default function RouteModal() {
         </View>
       )}
 
-      {/* Informações da rota como overlay - Estilo Waze */}
+
       {routeData && (
         <View style={styles.routeInfoOverlay}>
           <View style={styles.routeMainInfo}>
@@ -628,7 +622,7 @@ export default function RouteModal() {
               style={styles.startRouteButton}
               onPress={() => {
                 try {
-                  // Coordenadas de origem e destino
+
                   const coordinates = processRouteCoordinates(routeData);
                   if (coordinates.length === 0) {
                     Alert.alert('Erro', 'Dados da rota não disponíveis.');
@@ -638,7 +632,7 @@ export default function RouteModal() {
                   const originCoordinate = coordinates[0];
                   const destinationCoordinate = coordinates[coordinates.length - 1];
                   
-                  // Navegar para a tela de navegação nativa
+
                   const navigationRouteData = {
                     origin: originCoordinate,
                     destination: destinationCoordinate,
