@@ -30,7 +30,7 @@ Antes de começar, certifique-se de ter instalado:
 
 1. **Clone o repositório:**
 ```bash
-git clone <url-do-repositorio>
+git clone <https://github.com/Fabricio-Antonio/Rotas4me-mobile>
 cd Rotas4me-mobile
 ```
 
