@@ -9,52 +9,50 @@
   <img src="https://img.shields.io/badge/project-active--development-yellow" />
   <img src="https://img.shields.io/badge/made%20with-React--Native-blue" />
   <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
+  <br/>
+  <strong>English version</strong> | <a href="README.pt.md">Portuguese version</a>
 </p>
 
 
 
-## Descrição
 
-O Roas4Me é um aplicativo que permite aos usuários encontrar e avaliar rotas seguras, reportar incidentes e compartilhar informações sobre segurança urbana.
-Rotas4Me nasceu como uma resposta ousada e estratégica ao Desafio Mulher Mais Segura, promovido pela [CBR17](https://brasil.campus-party.org/cpbr17/hackathons/desafio-mulher-mais-segura/) no hackathon de 2025. Essa iniciativa teve como objetivo central incentivar o desenvolvimento de soluções tecnológicas voltadas à prevenção da violência contra a mulher no Distrito Federal.
-<br/>
-<br/>
-Mais do que um simples aplicativo, o Rotas4Me é uma plataforma inteligente de mobilidade urbana com foco em segurança. Ele permite que usuários encontrem e avaliem rotas seguras em tempo real, relatem incidentes e compartilhem informações críticas sobre pontos de risco — tudo de forma colaborativa e com base em dados geolocalizados.
-<br/>
-<br/>
-Criado para empoderar, proteger e transformar o cotidiano urbano, o Rotas4Me representa inovação com propósito e tecnologia com impacto social real.
+## Description
+Roas4Me is an app that allows users to find and rate safe routes, report incidents, and share information about urban safety.
 
-<br/>
+Rotas4Me was born as a bold and strategic response to the Safer Woman Challenge, promoted by [CBR17](https://brasil.campus-party.org/cpbr17/hackathons/desafio-mulher-mais-segura/) during the 2025 hackathon. This initiative aimed to encourage the development of tech solutions focused on preventing violence against women in the Federal District of Brazil.
+
+More than just an app, Rotas4Me is a smart urban mobility platform focused on safety. It enables users to find and rate safe routes in real time, report incidents, and share critical information about risk areas — all collaboratively and based on geolocated data.
+
+Designed to empower, protect, and transform daily urban life, Rotas4Me represents innovation with purpose and technology with real social impact.
 
 <div align="center">
-<p>Pitch de apresentação</p>
+<p>Pitch of presentation</p>
 
 [![Pitch Rotas4Me](https://img.youtube.com/vi/TQDn3RTcNbs/0.jpg)](https://www.youtube.com/watch?v=TQDn3RTcNbs)
 
 </div>
 
-## 🎯 Objetivo do projeto
-Rotas4Me é um aplicativo mobile criado para ajudar mulheres a se locomoverem com mais segurança nas cidades. A proposta é simples, mas poderosa: permitir que usuárias encontrem e avaliem rotas seguras, relatem incidentes em tempo real e compartilhem informações relevantes sobre segurança urbana. 
+## 🎯 Project Objective
+Rotas4Me is a mobile app designed to help women navigate cities more safely. The concept is simple yet powerful: enable users to find and rate safe routes, report incidents in real time, and share relevant information about urban safety.
 
-Focado na prevenção, o app utiliza dados colaborativos e critérios geográficos para traçar caminhos que evitam áreas de risco — como ruas mal iluminadas, regiões com histórico de assaltos, pontos de tráfico e outros locais perigosos. Em contrapartida, prioriza trajetos com presença de comércios, câmeras de segurança, e proximidade de delegacias.
+With a focus on prevention, the app uses collaborative data and geographical criteria to map routes that avoid high-risk areas — such as poorly lit streets, zones with a history of assaults, drug trafficking points, and other dangerous locations. Instead, it prioritizes paths near businesses, security cameras, and police stations.
 
+On the home screen, the user sees a map with their current location and can:
 
-Na tela inicial, a usuária visualiza um mapa com sua localização atual e pode:
+Rate routes and check reviews from other users;
 
-- Avaliar rotas e consultar avaliações de outras usuárias;
+View real-time alerts marked by interactive icons on the map;
 
-- Ver alertas em tempo real sinalizados por ícones interativos no mapa;
+Trigger an emergency button that sends an SOS SMS with their location to trusted contacts previously registered;
 
-- Acionar um botão de emergência, que envia um SMS com pedido de socorro e localização para contatos de confiança previamente cadastrados;
+Quickly start a police report, locate the nearest police station in the Federal District, and call 180, Brazil’s support hotline for women facing violence;
 
-- Iniciar rapidamente um boletim de ocorrência, localizar a delegacia mais próxima no DF e ligar para o 180, canal de apoio à mulher em situação de violência;
+Receive automatic audio alerts when approaching areas with danger reports.
 
-- Receber alertas sonoros automáticos ao se aproximar de áreas com registros de perigo.
+All content in the app is community-driven, making the system dynamic, scalable, and closely aligned with real street conditions. The entire project — including the pitch, business plan, mobile app, and website — was built in just 48 hours during the CBR17 Hackathon, as part of the Safer Woman Challenge.
 
-
-Todo o conteúdo do app é construído com base em informações da própria comunidade, tornando o sistema vivo, escalável e conectado à realidade das ruas. O projeto completo — incluindo pitch, plano de negócios, aplicativo mobile e site — foi desenvolvido em apenas 48 horas durante o hackathon da CBR17, no contexto do Desafio Mulher Mais Segura.
-
-Rotas4Me não é só um aplicativo. É uma comunidade que protege umas às outras. É sobre se sentir segura, ser ouvida, e saber que não está sozinha. Seja para ir pra casa, pro trabalho ou pra vida, caminhe com a gente!
+Rotas4Me isn’t just an app.
+It’s a community where women look out for each other. It’s about feeling safe, being heard, and knowing you're not alone. Whether you're heading home, to work, or anywhere life takes you — walk with us.
 <br/>
 
 <div align="center">
@@ -64,212 +62,207 @@ Rotas4Me não é só um aplicativo. É uma comunidade que protege umas às outra
 
 </div>
 Um detalhe importante: desenvolvi o Rotas4Me sem nunca ter tido contato prévio com desenvolvimento mobile. Tudo foi feito aprendendo em tempo real, com mão na massa, explorando novas tecnologias sob pressão e com foco total em entregar uma solução funcional e com propósito. Foi uma imersão intensa, desafiadora — e extremamente transformadora.
- 
-## 👨‍💻 Tecnologias Utilizadas
 
+## 👨‍💻 Technologies Used
 
-| Tecnologias         | Descrição                                                                 |
+| Technologies         | Description                                                                 |
 |--------------------|-----------------------------------------------------------------------------|
-| **React Native**   | Framework para desenvolvimento de aplicativos mobile nativos com JavaScript e React. Permite criar apps para Android e iOS com uma única base de código. |
-| **Expo**           | Plataforma que facilita o desenvolvimento com React Native, oferecendo ferramentas prontas para build, deploy e testes rápidos. Ideal para MVPs e prototipagem ágil. |
-| **TypeScript**     | Superset do JavaScript que adiciona tipagem estática ao código, aumentando a robustez, legibilidade e segurança durante o desenvolvimento. |
-| **Axios**          | Cliente HTTP baseado em Promises, usado para consumir APIs de forma simples, eficiente e com controle de erros refinado. |
-| **Google Maps API**| API de geolocalização usada para exibir mapas, calcular rotas e integrar recursos de localização em tempo real no app. |
+| **React Native**   | Framework for building native mobile applications using JavaScript and React. It allows for creating Android and iOS apps with a single codebase. |
+| **Expo**           | A platform that simplifies development with React Native, offering ready-to-use tools for building, deploying, and quick testing. Ideal for MVPs and rapid prototyping. |
+| **TypeScript**     | A superset of JavaScript that adds static typing to the code, increasing robustness, readability, and development safety. |
+| **Axios**          | A Promise-based HTTP client used to consume APIs in a simple, efficient way with refined error handling. |
+| **Google Maps API**| A geolocation API used to display maps, calculate routes, and integrate real-time location features into the app. |
 
+## 📋 Prerequisites
+Before getting started, make sure you have the following installed:
 
-## 📋 Pré-requisitos
+- Node.js (version 18 or higher)
+- npm or yarn
+- Expo CLI
+- Android Studio (for Android development)
+- Xcode (for iOS development – macOS only)
 
-Antes de começar, certifique-se de ter instalado:
+## 🔧 Installation
+Clone the repository:
 
-- [Node.js](https://nodejs.org/) (versão 18 ou superior)
-- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
-- [Expo CLI](https://docs.expo.dev/get-started/installation/)
-- [Android Studio](https://developer.android.com/studio) (para desenvolvimento Android)
-- [Xcode](https://developer.apple.com/xcode/) (para desenvolvimento iOS - apenas macOS)
-
-## 🔧 Instalação
-
-1. **Clone o repositório:**
-```bash
+```
 git clone <https://github.com/Fabricio-Antonio/Rotas4me-mobile>
 cd Rotas4me-mobile
 ```
 
-2. **Instale as dependências:**
-```bash
+Install dependencies:
+
+```
 npm install
-# ou
+# or
 yarn install
 ```
 
-3. **Configure as variáveis de ambiente:**
+Set up environment variables:
 
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+Create a .env file at the root of the project with the following variables:
 
-```env
-# URL da API Backend
+```
+# Backend API URL
 EXPO_PUBLIC_BACKEND_URL=https://api.rotas4me.com
 
-# Google Maps e Places API Keys
-EXPO_PUBLIC_GOOGLE_MAPS_API_KEY=sua_google_maps_api_key_aqui
-EXPO_PUBLIC_GOOGLE_PLACES_API_KEY=sua_google_places_api_key_aqui
+# Google Maps and Places API Keys
+EXPO_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
+EXPO_PUBLIC_GOOGLE_PLACES_API_KEY=your_google_places_api_key_here
 
 # Environment
 EXPO_PUBLIC_ENVIRONMENT=development
 ```
 
-### 🗝️ Configuração das API Keys do Google
+### 🗝️ Google API Keys Configuration
+To obtain your Google Maps API keys:
+Go to the Google Cloud Console
+Create a new project or select an existing one
+Enable the following APIs:
+- Maps SDK for Android
+- Maps SDK for iOS
+- Places API
+Geocoding API
+Create credentials (API Key)
 
-Para obter as chaves da API do Google Maps:
+Set up API restrictions as needed
 
-1. Acesse o [Google Cloud Console](https://console.cloud.google.com/)
-2. Crie um novo projeto ou selecione um existente
-3. Ative as seguintes APIs:
-   - Maps SDK for Android
-   - Maps SDK for iOS
-   - Places API
-   - Geocoding API
-4. Crie credenciais (API Key)
-5. Configure as restrições de API conforme necessário
-
-## 🏃‍♂️ Executando o Projeto
-
-### Desenvolvimento
-
-```bash
-# Iniciar o servidor de desenvolvimento
+### 🏃‍♂️ Running the Project
+Development
+```
+# Start the development server
 npm start
-# ou
+# or
 yarn start
 ```
 
-### Plataformas Específicas
-
-```bash
+Platform-Specific Commands
+```
 # Android
 npm run android
-# ou
+# or
 yarn android
 
-# iOS (apenas macOS)
+# iOS (macOS only)
 npm run ios
-# ou
+# or
 yarn ios
 
 # Web
 npm run web
-# ou
+# or
 yarn web
 ```
 
-## 📱 Testando no Dispositivo
+## 📱 Testing on a Device
+Using Expo Go
+Install [Expo Go](https://expo.dev/client) on your device
 
-### Usando Expo Go
+Run ```npx expo start --tunnel``` in the terminal to use a USB connection, or ```npx expo start``` to use the local network
 
-1. Instale o [Expo Go](https://expo.dev/client) no seu dispositivo
-2. Execute `npx expo start --tunnel` no terminal utilizando um cabo, e `npx expo start` para utilizar a rede.
-3. Escaneie o QR code com o Expo Go (Android) ou Camera (iOS)
+Scan the QR code using Expo Go (Android) or the Camera app (iOS)
 
-## 📁 Estrutura do Projeto
-
+## 📁 Project Structure
 ```
 Rotas4me-mobile/
-├── app/                    # Páginas da aplicação (Expo Router)
-│   ├── (tabs)/            # Abas principais
-│   │   ├── index.tsx      # Tela principal (mapa)
-│   │   ├── call.tsx       # Tela de chamadas de emergência
-│   │   ├── info.tsx       # Informações e dicas
-│   │   ├── profile.tsx    # Perfil do usuário
-│   │   └── report.tsx     # Reportar incidentes
-│   ├── _layout.tsx        # Layout raiz
+├── app/                    # Application pages (Expo Router)
+│   ├── (tabs)/            # Main tabs
+│   │   ├── index.tsx      # Main screen (map)
+│   │   ├── call.tsx       # Emergency call screen
+│   │   ├── info.tsx       # Safety tips and information
+│   │   ├── profile.tsx    # User profile
+│   │   └── report.tsx     # Incident reporting
+│   ├── _layout.tsx        # Root layout
 │   ├── modal.tsx          # Modal screens
-│   ├── navigation.tsx     # Navegação
-│   └── route-evaluation.tsx # Avaliação de rotas
-├── assets/                # Recursos estáticos
-│   ├── fonts/             # Fontes customizadas (Poppins)
-│   ├── icons/             # Ícones SVG
-│   ├── images/            # Imagens
-│   └── markers/           # Marcadores do mapa
-├── components/            # Componentes reutilizáveis
+│   ├── navigation.tsx     # Navigation
+│   └── route-evaluation.tsx # Route evaluation
+├── assets/                # Static assets
+│   ├── fonts/             # Custom fonts (Poppins)
+│   ├── icons/             # SVG icons
+│   ├── images/            # Images
+│   └── markers/           # Map markers
+├── components/            # Reusable components
 │   ├── AddressAutocomplete.tsx
 │   ├── CustomTabBar.tsx
 │   └── ...
-├── constants/             # Constantes e configurações
-├── services/              # Serviços e APIs
-│   ├── ApiService.ts      # Serviço principal da API
+├── constants/             # Constants and configurations
+├── services/              # Services and APIs
+│   ├── ApiService.ts      # Main API service
 │   ├── NavigationService.ts
 │   └── NominatimService.ts
-├── app.json              # Configuração do Expo
-├── eas.json              # Configuração do EAS Build
-└── package.json          # Dependências do projeto
+├── app.json              # Expo configuration
+├── eas.json              # EAS Build configuration
+└── package.json          # Project dependencies
 ```
 
-## 🌐 API Backend
+## 🌐 Backend API
+The app is integrated with the Rotas4me API. The main endpoints used are:
 
-O aplicativo está integrado com a API Rotas4me. Os principais endpoints utilizados são:
+Safety Markers
+- **GET** ```/maps/safety-markers``` – Fetch nearby safety markers
 
-### Marcadores de Segurança
-- **GET** `/maps/safety-markers` - Buscar marcadores de segurança próximos
-- **GET** `/maps/all-markers` - Buscar todos os marcadores
-- **GET** `/maps/markers-by-type` - Buscar marcadores por tipo
-- **GET** `/marker/nearby` - Buscar marcadores próximos com parâmetros de localização
+- **GET** ```/maps/all-markers``` – Fetch all markers
 
-### Cálculo de Rota
-- **GET** `/maps/route` - Calcular rota evitando marcadores perigosos
-- Parâmetros: `origin`, `destination`, `avoidDangerous` (boolean)
+- **GET** ```/maps/markers-by-type``` – Fetch markers by type
 
-### Geocodificação
-- **GET** `/maps/geocode` - Geocodificar endereço
-- **GET** `/maps/reverse-geocode` - Geocodificação reversa
-- **GET** `/maps/distance-matrix` - Calcular matriz de distância
+- **GET** ```/marker/nearby``` – Fetch nearby markers using location parameters
 
-### Usuários
-- **GET** `/user/nearby` - Buscar usuários próximos
-- **POST** `/user/{id}/emergency-alert` - Enviar alerta de emergência
+Route Calculation
+- **GET** ```/maps/route``` – Calculate route while avoiding dangerous markers
 
-### SMS
-- **GET** `/sms/status` - Verificar status do serviço SMS (usado como health check)
+Parameters: origin, destination, avoidDangerous (boolean)
 
-## 🌍 Variáveis de Ambiente
+Geocoding
+- **GET** ```/maps/geocode``` – Geocode an address
 
+- **GET** ```/maps/reverse-geocode``` – Reverse geocoding
+
+- **GET** ```/maps/distance-matrix``` – Calculate distance matrix
+
+Users
+- **GET** ```/user/nearby``` – Find nearby users
+
+- **POST** ```/user/{id}/emergency-alert``` – Send emergency alert
+
+SMS
+- **GET** ```/sms/status``` – Check SMS service status (used as health check)
+
+## 🌍 Environment Variables
 | Variável | Descrição | Exemplo |
 |----------|-----------|----------|
-| `EXPO_PUBLIC_BACKEND_URL` | URL da API backend | `https://api.rotas4me.com` |
-| `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` | Chave da API do Google Maps | `AIzaSy...` |
-| `EXPO_PUBLIC_GOOGLE_PLACES_API_KEY` | Chave da API do Google Places | `AIzaSy...` |
-| `EXPO_PUBLIC_ENVIRONMENT` | Ambiente de execução | `development`, `production` |
+| `EXPO_PUBLIC_BACKEND_URL` | Backend API URL	 | `https://api.rotas4me.com` |
+| `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` | Google Maps API Key	 | `AIzaSy...` |
+| `EXPO_PUBLIC_GOOGLE_PLACES_API_KEY` | Google Places API Key	 | `AIzaSy...` |
+| `EXPO_PUBLIC_ENVIRONMENT` | Runtime environment	 | `development`, `production` |
 
-## 🔒 Segurança
+## 🔒 Security
+- **Never** commit API keys to the repository
+- Use environment variables for sensitive information
+- Configure proper restrictions on Google Cloud APIs
+- Keep dependencies up to date
 
-- **Nunca** commite as chaves de API no repositório
-- Use variáveis de ambiente para informações sensíveis
-- Configure restrições adequadas nas APIs do Google Cloud
-- Mantenha as dependências atualizadas
+## 🐛 Troubleshooting
+API Key Not Found Error
 
-## 🐛 Solução de Problemas
-
-### Erro de API Key não encontrada
-
-```bash
-# Limpe o cache e reinicie
+```
+# Clear cache and restart
 npx expo start --clear
 ```
-```bash
-# Limpe node_modules e reinstale
+```
+# Remove node_modules and reinstall
 rm -rf node_modules
 npm install
 
-# Limpe cache do Expo
+# Clear Expo cache and fix dependencies
 npx expo install --fix
 ```
 
-### Problemas com mapas
+### Map Issues
+1. Verify that API keys are configured correctly
+2. Confirm the required APIs are enabled in Google Cloud
+3. Check API restrictions settings
 
-1. Verifique se as API Keys estão configuradas corretamente
-2. Confirme se as APIs necessárias estão ativadas no Google Cloud
-3. Verifique as restrições de API
-
-# Equipe  👥
+# Team  👥
 
 [Radymilla Camilo](https://www.linkedin.com/in/radymilla-cristiano/) - Product & Brand Designer <br/>
 [Kayus Gracco](https://www.linkedin.com/in/engkayusgracco/) - Business & VideoMaker <br/>
@@ -277,6 +270,6 @@ npx expo install --fix
 [Fabrício Santos](https://www.linkedin.com/in/fabricio-ss/) - Web & Mobile Developer <br/>
 [Thauan Rodrigues](https://www.linkedin.com/in/thauan-rodrigues-1744072a6/) Back-end Developer & DevOps <br/>
 
-## 📄 Licença
+📄 License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
