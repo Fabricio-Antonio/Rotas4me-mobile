@@ -1,4 +1,4 @@
-# Rotas4me Mobile
+# Rotas4me
 
 <div align="center">
 <img src="https://github.com/user-attachments/assets/37340718-e074-4e7d-89b3-8c90f9570566" width="120" />
@@ -60,9 +60,10 @@ Rotas4Me não é só um aplicativo. É uma comunidade que protege umas às outra
 <div align="center">
 <p>Vídeo demo</p>
 
-[![Pitch Rotas4Me](https://img.youtube.com/vi/B-SbikprP_s/0.jpg)](https://https://www.youtube.com/shorts/B-SbikprP_s)
+[![Demo Rotas4Me](https://img.youtube.com/vi/B-SbikprP_s/0.jpg)](https://www.youtube.com/shorts/B-SbikprP_s)
 
 </div>
+Um detalhe importante: desenvolvi o Rotas4Me sem nunca ter tido contato prévio com desenvolvimento mobile. Tudo foi feito aprendendo em tempo real, com mão na massa, explorando novas tecnologias sob pressão e com foco total em entregar uma solução funcional e com propósito. Foi uma imersão intensa, desafiadora — e extremamente transformadora.
  
 ## 👨‍💻 Tecnologias Utilizadas
 
@@ -267,6 +268,14 @@ npx expo install --fix
 1. Verifique se as API Keys estão configuradas corretamente
 2. Confirme se as APIs necessárias estão ativadas no Google Cloud
 3. Verifique as restrições de API
+
+# Equipe  👥
+
+[Radymilla Camilo](https://www.linkedin.com/in/radymilla-cristiano/) - Product & Brand Designer <br/>
+[Kayus Gracco](https://www.linkedin.com/in/engkayusgracco/) - Business & VideoMaker <br/>
+[Luiza Juá](https://www.linkedin.com/in/luiza-ju%C3%A1-589b96311/) - Research & Data Analysis <br/>
+[Fabrício Santos](https://www.linkedin.com/in/fabricio-ss/) - Web & Mobile Developer <br/>
+[Thauan Rodrigues](https://www.linkedin.com/in/thauan-rodrigues-1744072a6/) Back-end Developer & DevOps <br/>
 
 ## 📄 Licença
 
