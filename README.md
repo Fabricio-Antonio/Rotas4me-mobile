@@ -1,20 +1,80 @@
 # Rotas4me Mobile
 
-Aplicativo móvel para navegação e avaliação de rotas seguras, desenvolvido com React Native e Expo.
+<div align="center">
+<img src="https://github.com/user-attachments/assets/37340718-e074-4e7d-89b3-8c90f9570566" width="120" />
+</div>
+<br/>
 
-## 📱 Sobre o Projeto
+<p align="center">
+  <img src="https://img.shields.io/badge/project-active--development-yellow" />
+  <img src="https://img.shields.io/badge/made%20with-React--Native-blue" />
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" />
+</p>
 
-O Rotas4me é um aplicativo que permite aos usuários encontrar e avaliar rotas seguras, reportar incidentes e compartilhar informações sobre segurança urbana.
 
-## 🚀 Tecnologias Utilizadas
 
-- **React Native** 0.79.4
-- **Expo** ~53.0.12
-- **Expo Router** ~5.1.0
-- **React Native Maps** 1.20.1
-- **TypeScript** ~5.8.3
-- **Axios** para requisições HTTP
-- **Google Maps API** para mapas e autocompletar
+## Descrição
+
+O Roas4Me é um aplicativo que permite aos usuários encontrar e avaliar rotas seguras, reportar incidentes e compartilhar informações sobre segurança urbana.
+Rotas4Me nasceu como uma resposta ousada e estratégica ao Desafio Mulher Mais Segura, promovido pela [CBR17](https://brasil.campus-party.org/cpbr17/hackathons/desafio-mulher-mais-segura/) no hackathon de 2025. Essa iniciativa teve como objetivo central incentivar o desenvolvimento de soluções tecnológicas voltadas à prevenção da violência contra a mulher no Distrito Federal.
+<br/>
+<br/>
+Mais do que um simples aplicativo, o Rotas4Me é uma plataforma inteligente de mobilidade urbana com foco em segurança. Ele permite que usuários encontrem e avaliem rotas seguras em tempo real, relatem incidentes e compartilhem informações críticas sobre pontos de risco — tudo de forma colaborativa e com base em dados geolocalizados.
+<br/>
+<br/>
+Criado para empoderar, proteger e transformar o cotidiano urbano, o Rotas4Me representa inovação com propósito e tecnologia com impacto social real.
+
+<br/>
+
+<div align="center">
+<p>Pitch de apresentação</p>
+
+[![Pitch Rotas4Me](https://img.youtube.com/vi/TQDn3RTcNbs/0.jpg)](https://www.youtube.com/watch?v=TQDn3RTcNbs)
+
+</div>
+
+## 🎯 Objetivo do projeto
+Rotas4Me é um aplicativo mobile criado para ajudar mulheres a se locomoverem com mais segurança nas cidades. A proposta é simples, mas poderosa: permitir que usuárias encontrem e avaliem rotas seguras, relatem incidentes em tempo real e compartilhem informações relevantes sobre segurança urbana. 
+
+Focado na prevenção, o app utiliza dados colaborativos e critérios geográficos para traçar caminhos que evitam áreas de risco — como ruas mal iluminadas, regiões com histórico de assaltos, pontos de tráfico e outros locais perigosos. Em contrapartida, prioriza trajetos com presença de comércios, câmeras de segurança, e proximidade de delegacias.
+
+
+Na tela inicial, a usuária visualiza um mapa com sua localização atual e pode:
+
+- Avaliar rotas e consultar avaliações de outras usuárias;
+
+- Ver alertas em tempo real sinalizados por ícones interativos no mapa;
+
+- Acionar um botão de emergência, que envia um SMS com pedido de socorro e localização para contatos de confiança previamente cadastrados;
+
+- Iniciar rapidamente um boletim de ocorrência, localizar a delegacia mais próxima no DF e ligar para o 180, canal de apoio à mulher em situação de violência;
+
+- Receber alertas sonoros automáticos ao se aproximar de áreas com registros de perigo.
+
+
+Todo o conteúdo do app é construído com base em informações da própria comunidade, tornando o sistema vivo, escalável e conectado à realidade das ruas. O projeto completo — incluindo pitch, plano de negócios, aplicativo mobile e site — foi desenvolvido em apenas 48 horas durante o hackathon da CBR17, no contexto do Desafio Mulher Mais Segura.
+
+Rotas4Me não é só um aplicativo. É uma comunidade que protege umas às outras. É sobre se sentir segura, ser ouvida, e saber que não está sozinha. Seja para ir pra casa, pro trabalho ou pra vida, caminhe com a gente!
+<br/>
+
+<div align="center">
+<p>Vídeo demo</p>
+
+[![Pitch Rotas4Me](https://img.youtube.com/vi/B-SbikprP_s/0.jpg)](https://https://www.youtube.com/shorts/B-SbikprP_s)
+
+</div>
+ 
+## 👨‍💻 Tecnologias Utilizadas
+
+
+| Tecnologias         | Descrição                                                                 |
+|--------------------|-----------------------------------------------------------------------------|
+| **React Native**   | Framework para desenvolvimento de aplicativos mobile nativos com JavaScript e React. Permite criar apps para Android e iOS com uma única base de código. |
+| **Expo**           | Plataforma que facilita o desenvolvimento com React Native, oferecendo ferramentas prontas para build, deploy e testes rápidos. Ideal para MVPs e prototipagem ágil. |
+| **TypeScript**     | Superset do JavaScript que adiciona tipagem estática ao código, aumentando a robustez, legibilidade e segurança durante o desenvolvimento. |
+| **Axios**          | Cliente HTTP baseado em Promises, usado para consumir APIs de forma simples, eficiente e com controle de erros refinado. |
+| **Google Maps API**| API de geolocalização usada para exibir mapas, calcular rotas e integrar recursos de localização em tempo real no app. |
+
 
 ## 📋 Pré-requisitos
 
