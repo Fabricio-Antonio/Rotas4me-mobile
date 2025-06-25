@@ -61,7 +61,7 @@ It’s a community where women look out for each other. It’s about feeling saf
 [![Demo Rotas4Me](https://img.youtube.com/vi/B-SbikprP_s/0.jpg)](https://www.youtube.com/shorts/B-SbikprP_s)
 
 </div>
-Um detalhe importante: desenvolvi o Rotas4Me sem nunca ter tido contato prévio com desenvolvimento mobile. Tudo foi feito aprendendo em tempo real, com mão na massa, explorando novas tecnologias sob pressão e com foco total em entregar uma solução funcional e com propósito. Foi uma imersão intensa, desafiadora — e extremamente transformadora.
+One important detail: I developed Rotas4Me without any prior experience in mobile development. Everything was built while learning in real time — hands-on, under pressure, and diving into new technologies with full focus on delivering a functional and purpose-driven solution. It was an intense, challenging, and truly transformative experience.
 
 ## 👨‍💻 Technologies Used
 
