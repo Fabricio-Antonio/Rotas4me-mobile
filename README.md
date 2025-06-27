@@ -82,6 +82,11 @@ Before getting started, make sure you have the following installed:
 - Android Studio (for Android development)
 - Xcode (for iOS development – macOS only)
 
+## 🗺️ User map
+
+<img width="8320" alt="Brainstorm _ Documentação" src="https://github.com/user-attachments/assets/2401f489-5920-421c-8fae-5b1f2869177b" />
+
+
 ## 🔧 Installation
 Clone the repository:
 
